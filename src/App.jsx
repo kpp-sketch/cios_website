@@ -15,12 +15,12 @@ const workPackages = [
 ];
 
 const teamMembers = [
-  { name: 'doc. Ing. Josef Montag, Ph.D.', surname: 'Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'research', 'admin'], bio: 'Specializes in empirical legal studies and the economics of crime. Currently chairs the Economics Panel at the Czech Science Foundation.', photo: '', website: 'https://josefmontag.github.io' },
+  { name: 'Josef Montag', surname: 'Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'research', 'admin'], bio: 'Specializes in empirical legal studies and the economics of crime. Currently chairs the Economics Panel at the Czech Science Foundation.', photo: '', website: 'https://josefmontag.github.io' },
   { name: 'Anna Malá', surname: 'Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Strategic project management and institutional coordination.', photo: '' },
   { name: 'Eva Myšáková', surname: 'Myšáková', role: 'Financial Manager', email: 'mysakova@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Financial oversight, budgeting, and reporting for large-scale European research grants.', photo: '' },
   { name: 'Kateřina Pospíchalová Pavlov', surname: 'Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Coordinates administrative support, logistics, and institutional communication for the CIOS project.', photo: '' },
   { name: 'Karolína Martínek', surname: 'Martínek', role: 'Data Steward & Open Access Officer', email: 'martinek@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Responsible for data management planning and ensuring open access to research outputs.', photo: '' },
-  { name: 'Mgr. Michal Šoltés, M.A., Ph.D.', surname: 'Šoltés', role: 'Work Package Leader', email: 'michal.soltes@prf.cuni.cz', groups: ['research'], bio: 'Focuses on empirical criminal law and judicial decision-making. Researcher at IDEA (CERGE-EI).', photo: '', website: 'https://michalsoltes.com' },
+  { name: 'Michal Šoltés', surname: 'Šoltés', role: 'Work Package Leader', email: 'michal.soltes@prf.cuni.cz', groups: ['research'], bio: 'Focuses on empirical criminal law and judicial decision-making. Researcher at IDEA (CERGE-EI).', photo: '', website: 'https://michalsoltes.com' },
   { name: 'Volker Kaul', surname: 'Kaul', role: 'Work Package Leader', email: 'volker.kaul@fsv.cuni.cz', groups: ['research'], bio: 'Researches political philosophy and the digital public sphere, with a focus on polarization and democracy.', photo: '' },
   { name: 'Alice Dvořáková', surname: 'Dvořáková', role: 'Senior Researcher', affiliation: 'Prague University of Economics and Business', groups: ['research'], bio: 'Research interests include macroeconomic links between financial systems, technological innovation, and wealth distribution.', photo: '', email: 'alice.dvorakova@vse.cz' },
   { name: 'Petr Novák', surname: 'Novák', role: 'Junior Researcher', affiliation: 'Faculty of Law, Masaryk University', groups: ['research'], bio: 'Focuses on consumer protection law and behavioral impacts in online digital marketplaces.', photo: '', email: 'petr.novak@law.muni.cz', website: '#' },
@@ -342,8 +342,9 @@ export default function App() {
       <nav className="sticky top-0 z-50 bg-white shadow-sm h-28 sm:h-32">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
           <div className="cursor-pointer flex items-center h-full" onClick={() => handleNavClick('home')}>
+            {/* Dynamic base handling: Removing leading slash for GitHub Pages compatibility */}
             <img 
-              src="/CIOS_Logo_Color.png" 
+              src="CIOS_Logo_Color.png" 
               alt="CIOS Logo" 
               className="h-20 sm:h-24 object-contain"
               onError={e => e.target.style.display='none'}
@@ -395,7 +396,7 @@ export default function App() {
             <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-10" style={{ color: colors.navy }}>Contacts</h4>
             <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
               {[
-                { name: 'doc. Ing. Josef Montag, Ph.D.', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
                 { name: 'Anna Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz' },
                 { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz' }
               ].map((c, i) => (
@@ -410,7 +411,7 @@ export default function App() {
           
           <div className="pt-12 border-t flex flex-col items-center" style={{ borderColor: colors.borderGray }}>
             <img 
-              src="/CIOS_Logos_partners.png" 
+              src="CIOS_Logos_partners.png" 
               className="max-h-20 w-auto mb-10" 
               alt="CIOS Partners" 
               onError={e => e.target.style.display='none'}
