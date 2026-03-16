@@ -15,12 +15,12 @@ const workPackages = [
 ];
 
 const teamMembers = [
-  { name: 'Josef Montag', surname: 'Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'research', 'admin'], bio: 'Specializes in empirical legal studies and the economics of crime. Currently chairs the Economics Panel at the Czech Science Foundation.', photo: '', website: 'https://josefmontag.github.io' },
+  { name: 'doc. Ing. Josef Montag, Ph.D.', surname: 'Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'research', 'admin'], bio: 'Specializes in empirical legal studies and the economics of crime. Currently chairs the Economics Panel at the Czech Science Foundation.', photo: '', website: 'https://josefmontag.github.io' },
   { name: 'Anna Malá', surname: 'Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Strategic project management and institutional coordination.', photo: '' },
   { name: 'Eva Myšáková', surname: 'Myšáková', role: 'Financial Manager', email: 'mysakova@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Financial oversight, budgeting, and reporting for large-scale European research grants.', photo: '' },
   { name: 'Kateřina Pospíchalová Pavlov', surname: 'Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Coordinates administrative support, logistics, and institutional communication for the CIOS project.', photo: '' },
   { name: 'Karolína Martínek', surname: 'Martínek', role: 'Data Steward & Open Access Officer', email: 'martinek@prf.cuni.cz', affiliation: 'Faculty of Law, Charles University', groups: ['management', 'admin'], bio: 'Responsible for data management planning and ensuring open access to research outputs.', photo: '' },
-  { name: 'Michal Šoltés', surname: 'Šoltés', role: 'Work Package Leader', email: 'michal.soltes@prf.cuni.cz', groups: ['research'], bio: 'Focuses on empirical criminal law and judicial decision-making. Researcher at IDEA (CERGE-EI).', photo: '', website: 'https://michalsoltes.com' },
+  { name: 'Mgr. Michal Šoltés, M.A., Ph.D.', surname: 'Šoltés', role: 'Work Package Leader', email: 'michal.soltes@prf.cuni.cz', groups: ['research'], bio: 'Focuses on empirical criminal law and judicial decision-making. Researcher at IDEA (CERGE-EI).', photo: '', website: 'https://michalsoltes.com' },
   { name: 'Volker Kaul', surname: 'Kaul', role: 'Work Package Leader', email: 'volker.kaul@fsv.cuni.cz', groups: ['research'], bio: 'Researches political philosophy and the digital public sphere, with a focus on polarization and democracy.', photo: '' },
   { name: 'Alice Dvořáková', surname: 'Dvořáková', role: 'Senior Researcher', affiliation: 'Prague University of Economics and Business', groups: ['research'], bio: 'Research interests include macroeconomic links between financial systems, technological innovation, and wealth distribution.', photo: '', email: 'alice.dvorakova@vse.cz' },
   { name: 'Petr Novák', surname: 'Novák', role: 'Junior Researcher', affiliation: 'Faculty of Law, Masaryk University', groups: ['research'], bio: 'Focuses on consumer protection law and behavioral impacts in online digital marketplaces.', photo: '', email: 'petr.novak@law.muni.cz', website: '#' },
@@ -32,10 +32,48 @@ const teamMembers = [
 ];
 
 const publicationsData = [
-  { id: 'pub-algorithmic-support', title: 'The Impact of Algorithmic Support on Judicial Decision Making', authors: 'Montag, J., Šoltés, M.', type: 'working-paper', year: '2025', abstract: 'This paper evaluates the rollout of the PRECID algorithmic support system among Czech judges. Using a difference-in-differences approach, we find that access to predictive sentencing guidelines reduces unwarranted disparities in sentencing outcomes by 14% without altering the overall severity of punishments. The findings suggest that data-driven tools can effectively guide human discretion in the criminal justice system.', pdf: '#', repo: 'https://ssrn.com' },
-  { id: 'pub-sentencing-disparities', title: 'Understanding Sentencing Disparities in the Digital Age', authors: 'Šoltés, M., et al.', type: 'journal-article', year: '2025', journal: 'Journal of Empirical Legal Studies', link: '#' },
-  { id: 'pub-digital-justice-chapter', title: 'Digital Governance and Rule of Law: A European Perspective', authors: 'Montag, J., Šoltés, M.', type: 'book-chapter', year: '2025', journal: 'In: Oxford Handbook of Digital Justice', link: '#' },
-  { id: 'pub-digital-public-sphere', title: 'Digital Public Sphere and Societal Polarization', authors: 'Kaul, V.', type: 'working-paper', year: '2025', abstract: 'We examine how algorithmically curated social media environments affect political polarization. Through a series of behavioral experiments, we demonstrate that exposure to opposing viewpoints in a highly digitized public sphere often backfires, increasing affective polarization rather than mitigating it.', pdf: '#', repo: 'https://repec.org' }
+  { 
+    id: 'pub-algorithmic-support', 
+    title: 'The Impact of Algorithmic Support on Judicial Decision Making', 
+    authors: 'Montag, J., Šoltés, M.', 
+    type: 'working-paper', 
+    year: '2025', 
+    abstract: 'This paper evaluates the rollout of the PRECID algorithmic support system among Czech judges. Using a difference-in-differences approach, we find that access to predictive sentencing guidelines reduces unwarranted disparities in sentencing outcomes by 14% without altering the overall severity of punishments. The findings suggest that data-driven tools can effectively guide human discretion in the criminal justice system.', 
+    pdf: '#', 
+    repo: 'https://ssrn.com' 
+  },
+  { 
+    id: 'pub-sentencing-disparities', 
+    title: 'Understanding Sentencing Disparities in the Digital Age', 
+    authors: 'Šoltés, M., et al.', 
+    type: 'journal-article', 
+    year: '2025', 
+    journal: 'Journal of Empirical Legal Studies', 
+    abstract: 'In this study, we analyze the impact of digital transformation on judicial sentencing consistency. By leveraging a longitudinal dataset of over 50,000 cases, we identify how information availability correlates with sentencing variance across different jurisdictions.',
+    pdf: '#',
+    link: 'https://onlinelibrary.wiley.com/journal/17401461' 
+  },
+  { 
+    id: 'pub-digital-justice-chapter', 
+    title: 'Digital Governance and Rule of Law: A European Perspective', 
+    authors: 'Montag, J., Šoltés, M.', 
+    type: 'book-chapter', 
+    year: '2025', 
+    journal: 'In: Oxford Handbook of Digital Justice', 
+    abstract: 'This chapter explores the evolving landscape of digital governance within the European Union. It examines how automated decision-making systems intersect with fundamental rights and the traditional rule of law frameworks, proposing a new regulatory paradigm for algorithmic accountability.',
+    pdf: '#',
+    link: 'https://global.oup.com' 
+  },
+  { 
+    id: 'pub-digital-public-sphere', 
+    title: 'Digital Public Sphere and Societal Polarization', 
+    authors: 'Kaul, V.', 
+    type: 'working-paper', 
+    year: '2025', 
+    abstract: 'We examine how algorithmically curated social media environments affect political polarization. Through a series of behavioral experiments, we demonstrate that exposure to opposing viewpoints in a highly digitized public sphere often backfires, increasing affective polarization rather than mitigating it.', 
+    pdf: '#', 
+    repo: 'https://repec.org' 
+  }
 ];
 
 // ==========================================
@@ -101,36 +139,44 @@ export default function App() {
     );
   };
 
-  const WorkingPaperItem = ({ pub }) => {
+  const PublicationItem = ({ pub }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-      <div id={pub.id} className="flex flex-col sm:flex-row gap-8 items-start mb-8 last:mb-0 scroll-mt-32">
-        <div className="w-12 h-12 shrink-0 bg-slate-50 border flex items-center justify-center rounded-lg mt-1" style={{ borderColor: colors.borderGray }}>
-          <FileText className="w-5 h-5 opacity-30" style={{ color: colors.navy }} />
+      <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32">
+        <div className="flex items-center gap-3 mb-1">
+          <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
+          <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
+            {pub.journal || pub.type.replace('-', ' ')}
+          </span>
         </div>
-        <div className="flex-grow">
-          <div className="flex items-center gap-3 mb-1">
-            <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
+        <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
+        <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+        
+        {pub.abstract && (
+          <div className="mb-4">
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              onMouseEnter={() => setIsOpen(true)}
+              className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" 
+              style={{ color: colors.red }}
+            >
+              Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
+            </button>
+            {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
           </div>
-          <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
-          <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
-          {pub.abstract && (
-            <div className="mb-4">
-              <button 
-                onClick={() => setIsOpen(!isOpen)} 
-                onMouseEnter={() => setIsOpen(true)}
-                className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" 
-                style={{ color: colors.red }}
-              >
-                Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
-              </button>
-              {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
-            </div>
+        )}
+        
+        <div className="flex gap-6 text-sm font-bold">
+          {pub.pdf && (
+            <a href={pub.pdf} className="flex items-center hover:underline" style={{ color: colors.navy }}>
+              <FileDown className="w-4 h-4 mr-2" /> PDF
+            </a>
           )}
-          <div className="flex gap-6 text-sm font-bold">
-            <a href={pub.pdf} className="flex items-center hover:underline" style={{ color: colors.navy }}><FileDown className="w-4 h-4 mr-2" /> PDF</a>
-            <a href={pub.repo} className="flex items-center hover:underline" style={{ color: colors.navy }}><Library className="w-4 h-4 mr-2" /> Repository</a>
-          </div>
+          {(pub.repo || pub.link) && (
+            <a href={pub.repo || pub.link} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+              <Library className="w-4 h-4 mr-2" /> {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
+            </a>
+          )}
         </div>
       </div>
     );
@@ -141,8 +187,8 @@ export default function App() {
       case 'home':
         return (
           <div className="animate-in fade-in duration-500">
-            <div className="py-16 px-6 sm:px-12 bg-white">
-              <div className="max-w-4xl mx-auto text-center">
+            <div className="py-12 px-6 sm:px-12 bg-white text-center">
+              <div className="max-w-4xl mx-auto">
                 <h1 className="text-4xl sm:text-5xl font-bold mb-8 leading-tight max-w-2xl mx-auto" style={{ color: colors.navy }}>
                   Center for Inequality and <br />Open Society
                 </h1>
@@ -222,7 +268,7 @@ export default function App() {
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Working Papers</h2>
               <div className="space-y-10">
                 {publicationsData.filter(p => p.type === 'working-paper').map((pub, idx) => (
-                  <WorkingPaperItem key={idx} pub={pub} />
+                  <PublicationItem key={idx} pub={pub} />
                 ))}
               </div>
             </div>
@@ -230,16 +276,7 @@ export default function App() {
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Publications</h2>
               <div className="space-y-10">
                 {mergedPublications.map((pub, idx) => (
-                  <div key={idx} id={pub.id} className="mb-8 last:mb-0 scroll-mt-32">
-                    <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{pub.journal || pub.type.replace('-', ' ')}</span>
-                    <h3 className="text-xl font-bold mt-1 mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
-                    <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
-                    {pub.link && pub.link !== '#' && (
-                      <a href={pub.link} className="mt-2 inline-flex items-center text-xs font-bold hover:underline" style={{ color: colors.navy }}>
-                         View Item <ExternalLink className="w-3 h-3 ml-1" />
-                      </a>
-                    )}
-                  </div>
+                  <PublicationItem key={idx} pub={pub} />
                 ))}
               </div>
             </div>
@@ -354,25 +391,20 @@ export default function App() {
 
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center sm:text-left">
-          <div className="grid md:grid-cols-2 gap-16 mb-12 items-start">
-            <div className="hidden sm:block">
-            </div>
-            <div>
-              <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-10" style={{ color: colors.navy }}>Contacts</h4>
-              <div className="grid sm:grid-cols-2 gap-x-8 gap-y-10">
-                {[
-                  { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-                  { name: 'Anna Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz' },
-                  { name: 'Eva Myšáková', role: 'Financial Manager', email: 'mysakova@prf.cuni.cz' },
-                  { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz' }
-                ].map((c, i) => (
-                  <div key={i}>
-                    <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
-                    <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p>
-                    <a href={`mailto:${c.email}`} className="text-xs font-medium hover:underline block opacity-80" style={{ color: colors.midBlueText }}>{c.email}</a>
-                  </div>
-                ))}
-              </div>
+          <div className="mb-12">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-10" style={{ color: colors.navy }}>Contacts</h4>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
+              {[
+                { name: 'doc. Ing. Josef Montag, Ph.D.', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Anna Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz' },
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz' }
+              ].map((c, i) => (
+                <div key={i} className="min-w-[150px]">
+                  <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p>
+                  <a href={`mailto:${c.email}`} className="text-xs font-medium hover:underline block opacity-80" style={{ color: colors.midBlueText }}>{c.email}</a>
+                </div>
+              ))}
             </div>
           </div>
           
