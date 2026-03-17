@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch: # Allows you to trigger an update manually from the "Actions" tab
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,7 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. Set up Python to handle the Excel files
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -25,26 +24,21 @@ jobs:
       - name: Install Python Dependencies
         run: pip install pandas openpyxl
 
-      # 2. Run the sync script to generate src/data.json from your Excel files
-      # Make sure sync_data.py is located in a folder named 'scripts'
       - name: Run Sync Script
         run: python scripts/sync_data.py
 
-      # 3. Set up Node.js for the React build
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22 # Use the latest LTS
           cache: 'npm'
 
       - name: Install JS Dependencies
         run: npm install
 
-      # 4. Build the project (it will now use the freshly generated data.json)
       - name: Build Project
         run: npm run build
 
-      # 5. Deploy the 'dist' folder to GitHub Pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
