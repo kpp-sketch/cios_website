@@ -24,13 +24,22 @@ jobs:
       - name: Install Python Dependencies
         run: pip install pandas openpyxl
 
+      # Ensuring the script runs correctly by checking for its existence first
       - name: Run Sync Script
-        run: python scripts/sync_data.py
+        run: |
+          if [ -f scripts/sync_data.py ]; then
+            python scripts/sync_data.py
+          elif [ -f sync_data.py ]; then
+            python sync_data.py
+          else
+            echo "Error: sync_data.py not found in root or scripts/ folder."
+            exit 1
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # Use the latest LTS
+          node-version: 22
           cache: 'npm'
 
       - name: Install JS Dependencies
