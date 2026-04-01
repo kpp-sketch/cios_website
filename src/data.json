@@ -42,7 +42,7 @@
       "name": "Anna Malá",
       "surname": "Malá",
       "role": "Project Manager",
-      "email": "mala@prf.cuni.cz",
+      "email": "anna.mala@prf.cuni.cz",
       "affiliation": "Faculty of Law, Charles University",
       "groups": [
         "management",
@@ -55,7 +55,7 @@
       "name": "Eva Myšáková",
       "surname": "Myšáková",
       "role": "Financial Manager",
-      "email": "mysakova@prf.cuni.cz",
+      "email": "eva.mysakova@prf.cuni.cz",
       "affiliation": "Faculty of Law, Charles University",
       "groups": [
         "management",
@@ -67,8 +67,8 @@
     {
       "name": "Kateřina Pospíchalová Pavlov",
       "surname": "Pospíchalová Pavlov",
-      "role": "Administrator",
-      "email": "pavlov@prf.cuni.cz",
+      "role": "Project Administrator",
+      "email": "katerina.pospichalovapavlov@prf.cuni.cz",
       "affiliation": "Faculty of Law, Charles University",
       "groups": [
         "management",
