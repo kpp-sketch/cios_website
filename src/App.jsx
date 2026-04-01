@@ -11,9 +11,9 @@ const workPackages = [
   { id: 'WP1', title: 'Digital Public Sphere', leader: 'Volker Kaul', description: 'Examining how social media influence public discourse and contribute to societal polarization.' },
   { id: 'WP2', title: 'Inequality in Justice', leader: 'Michal Šoltés', description: 'Analyzing the causes and consequences of inequalities in court rulings using unique data from Czech and Dutch judges.' },
   { id: 'WP3', title: 'Information Support for Criminal Justice (PRECID)', leader: 'Josef Montag', description: 'Developing PRECID software to provide judges with data-driven and algorithmic support for decision-making.' },
-  { id: 'WP4', title: 'Finance, Innovation, and Inequality', leader: 'TBA', description: 'Investigating the macroeconomic links between financial systems, technological innovation, and wealth distribution.' },
-  { id: 'WP5', title: 'Legal Aspects of Vulnerability', leader: 'TBA', description: 'Exploring how legal frameworks address and sometimes exacerbate societal vulnerabilities.' },
-  { id: 'WP6', title: 'The Digitally Vulnerable Consumer', leader: 'TBA', description: 'Researching consumer protection and behavioral impacts in digital markets and online platforms.' }
+  { id: 'WP4', title: 'Finance, Innovation, and Inequality', leader: 'Eva Horváthová', description: 'Investigating the macroeconomic links between financial systems, technological innovation, and wealth distribution.' },
+  { id: 'WP5', title: 'Legal Aspects of Vulnerability', leader: 'Veronika Bílková', description: 'Exploring how legal frameworks address and sometimes exacerbate societal vulnerabilities.' },
+  { id: 'WP6', title: 'The Digitally Vulnerable Consumer', leader: 'Jakub Harašta', description: 'Researching consumer protection and behavioral impacts in digital markets and online platforms.' }
 ];
 
 const futureGeneration = [
@@ -382,8 +382,9 @@ export default function App() {
             <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
               {[
                 { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-                { name: 'Anna Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz' },
-                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz' }
+                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
+                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },      
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' }
               ].map((c, i) => (
                 <div key={i} className="min-w-[150px]">
                   <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
