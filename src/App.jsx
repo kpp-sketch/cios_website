@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
 
 // ==========================================
-// 1. DATA CONFIGURATION
+// 1. DATA CONFIGURATION (STATICKÉ SEKCE)
 // ==========================================
 
 const workPackages = [
@@ -57,6 +57,7 @@ export default function App() {
         }));
 
         setTeamMembers(formattedData);
+        // Poznámka: Publikace zatím zůstávají prázdné pole, dokud nebudou v Excelu nebo JSONu
       } catch (error) {
         console.error("Excel Load Error:", error);
       }
@@ -139,14 +140,6 @@ export default function App() {
             {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
           </div>
         )}
-        <div className="flex gap-6 text-sm font-bold">
-          {pub.pdf && pub.pdf !== '#' && <a href={pub.pdf} className="flex items-center hover:underline" style={{ color: colors.navy }}><FileDown className="w-4 h-4 mr-2" /> PDF</a>}
-          {(pub.repo || pub.link) && (
-            <a href={pub.repo || pub.link} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
-              <Library className="w-4 h-4 mr-2" /> {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
-            </a>
-          )}
-        </div>
       </div>
     );
   };
@@ -189,13 +182,13 @@ export default function App() {
               <div className="md:col-span-2">
                 <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Updates</h2>
                 <div className="space-y-8">
-                  {recentUpdates.map((pub, idx) => (
+                  {recentUpdates.length > 0 ? recentUpdates.map((pub, idx) => (
                     <div key={idx}>
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{(pub.type || '').replace('-', ' ')}</span>
                       <h3 className="text-xl font-bold mt-1 mb-2 leading-snug cursor-pointer hover:underline" style={{ color: colors.navy }} onClick={() => handleNavClick('publications', pub.id)}>{pub.title}</h3>
                       <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
                     </div>
-                  ))}
+                  )) : <p className="text-sm italic" style={{ color: colors.midBlueText }}>New publications coming soon.</p>}
                 </div>
               </div>
               <div>
@@ -241,20 +234,15 @@ export default function App() {
       case 'publications':
         const wps = publicationsData.filter(p => p.type === 'working-paper');
         const articles = publicationsData.filter(p => p.type === 'journal-article');
-        const chapters = publicationsData.filter(p => p.type === 'book-chapter');
         return (
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
             <section id="pub-working-papers" className="mb-16 scroll-mt-32">
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Working Papers</h2>
-              <div className="space-y-10">{wps.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div>
+              {wps.length > 0 ? <div className="space-y-10">{wps.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div> : <p className="italic">No working papers listed yet.</p>}
             </section>
-            <section id="pub-articles" className="pt-10 mt-10 mb-16 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
+            <section id="pub-articles" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Journal Articles</h2>
-              <div className="space-y-10">{articles.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div>
-            </section>
-            <section id="pub-chapters" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
-              <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Book Chapters</h2>
-              <div className="space-y-10">{chapters.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div>
+              {articles.length > 0 ? <div className="space-y-10">{articles.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div> : <p className="italic">No articles listed yet.</p>}
             </section>
           </div>
         );
@@ -263,7 +251,10 @@ export default function App() {
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
             <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
             <p className="text-lg leading-relaxed font-medium mb-6" style={{ color: colors.midBlueText }}>
-              The <strong>Center for Inequality and Open Society (CIOS)</strong> is a major interdisciplinary research initiative.
+              The <strong>Center for Inequality and Open Society (CIOS)</strong> is a major interdisciplinary research initiative. Our goal is to conduct cutting-edge research on the critical challenges faced by modern open societies in the digital age.
+            </p>
+            <p className="text-lg leading-relaxed font-medium mb-12" style={{ color: colors.midBlueText }}>
+              The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.
             </p>
             <div id="about-wp" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
@@ -280,6 +271,18 @@ export default function App() {
                 ))}
               </div>
             </div>
+            <div id="about-management" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
+              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
+              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-12">
+                {teamMembers.filter(m => m.groups && m.groups.includes('management')).map((m, idx) => (
+                  <div key={idx}>
+                    <h4 className="font-bold text-lg" style={{ color: colors.navy }}>{m.name}</h4>
+                    <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{m.role}</p>
+                    <a href={`mailto:${m.email}`} className="text-sm font-medium hover:underline block" style={{ color: colors.midBlueText }}>{m.email}</a>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         );
       default: return null;
@@ -288,6 +291,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
+      
+      {/* HEADER & NAV */}
       <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
           <div className="cursor-pointer flex items-center h-full" onClick={() => handleNavClick('home')}>
@@ -296,19 +302,70 @@ export default function App() {
           <div className="flex h-full">
             {['home', 'people', 'publications', 'about'].map(tab => (
               <div key={tab} className="h-full flex flex-col justify-center px-5 relative group">
-                <button onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1" style={{ color: activeTab === tab ? colors.navy : colors.midBlueText, borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent' }}>
+                <button 
+                  onClick={() => handleNavClick(tab)} 
+                  className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1" 
+                  style={{ 
+                    color: activeTab === tab ? colors.navy : colors.midBlueText,
+                    borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent'
+                  }}
+                >
                   {tab}
                 </button>
+                {/* SUBMENU PRO LEPŠÍ NAVIGACI */}
+                {(tab === 'people' || tab === 'publications' || tab === 'about') && activeTab === tab && (
+                  <div className="absolute top-[70%] right-5 flex gap-6 w-max pt-0">
+                    {tab === 'people' && (
+                      <button onClick={() => handleNavClick('people', 'future-generation')} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-navy transition">Future Generation</button>
+                    )}
+                    {tab === 'about' && (
+                      <>
+                        <button onClick={() => handleNavClick('about', 'about-wp')} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-navy transition">Work Packages</button>
+                        <button onClick={() => handleNavClick('about', 'about-management')} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-navy transition">Management</button>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </nav>
+
+      {/* MAIN CONTENT */}
       <main className="flex-grow">{renderContent()}</main>
+
+      {/* FOOTER - TADY BYLY TY KONTAKTY */}
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center sm:text-left">
+          <div className="mb-12">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-10" style={{ color: colors.navy }}>Contacts</h4>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
+              {[
+                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Project Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' }
+                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' }
+              ].map((c, i) => (
+                <div key={i} className="min-w-[150px]">
+                  <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p>
+                  <a href={`mailto:${c.email}`} className="text-xs font-medium hover:underline block opacity-80" style={{ color: colors.midBlueText }}>{c.email}</a>
+                </div>
+              ))}
+            </div>
+          </div>
+          
           <div className="pt-12 border-t flex flex-col items-center" style={{ borderColor: colors.borderGray }}>
-            <img src={getAssetUrl('CIOS_Logos_partners.png')} className="h-20 w-auto mb-10 object-contain" alt="CIOS Partners" onError={e => e.target.style.display='none'} />
+            <img 
+              src={getAssetUrl('CIOS_Logos_partners.png')} 
+              className="h-20 w-auto mb-10 object-contain" 
+              alt="CIOS Partners" 
+              onError={e => e.target.style.display='none'} 
+            />
+            <p className="text-[11px] font-medium text-center max-w-3xl leading-relaxed" style={{ color: '#4A6582' }}>
+              Co-funded by the European Regional Development Fund, project Center for Inequality and Open Society, no. CZ.02.01.01/00/23_025/0008690.
+            </p>
           </div>
         </div>
       </footer>
