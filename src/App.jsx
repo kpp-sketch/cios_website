@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Heart } from 'lucide-react';
+import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library } from 'lucide-react';
 
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -59,7 +59,7 @@ export default function App() {
         <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
         <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
         {pub.abstract && (
-          <div className="mb-4">
+          <div className="mb-4 text-left">
             <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center" style={{ color: colors.red }}>
               Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
             </button>
@@ -110,9 +110,9 @@ export default function App() {
           .filter(m => m.groups && (m.groups.includes('research') || m.groups.includes('admin')))
           .sort((a, b) => (a.surname || '').localeCompare((b.surname || ''), 'cs')); 
         return (
-          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto">
+          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Our People</h2>
-            <div className="space-y-10 text-left">
+            <div className="space-y-10">
               {alphabeticalTeam.map((member, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
                   <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg"><Users className="w-10 h-10 opacity-20" /></div>
@@ -131,11 +131,11 @@ export default function App() {
         const articles = publicationsData.filter(p => p.type === 'journal-article');
         const chapters = publicationsData.filter(p => p.type === 'book-chapter');
         return (
-          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto">
+          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Publications</h2>
-            <section className="mb-16"><h3 className="text-2xl font-bold mb-6 text-left">Working Papers</h3>{wps.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
-            <section className="pt-10 border-t mb-16"><h3 className="text-2xl font-bold mb-6 text-left">Journal Articles</h3>{articles.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
-            <section className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6 text-left">Book Chapters</h3>{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
+            <section className="mb-16"><h3 className="text-2xl font-bold mb-6">Working Papers</h3>{wps.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
+            <section className="pt-10 border-t mb-16"><h3 className="text-2xl font-bold mb-6">Journal Articles</h3>{articles.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
+            <section className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6">Book Chapters</h3>{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
           </div>
         );
       case 'about':
@@ -157,4 +157,33 @@ export default function App() {
           <div className="cursor-pointer" onClick={() => handleNavClick('home')}><img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" /></div>
           <div className="flex gap-8">
             {['home', 'people', 'publications', 'about'].map(tab => (
-              <button key={tab} onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-widest pb-1" style={{ color: activeTab ===
+              <button key={tab} onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-widest pb-1" style={{ color: activeTab === tab ? colors.navy : colors.midBlueText, borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent' }}>{tab}</button>
+            ))}
+          </div>
+        </div>
+      </nav>
+      <main className="flex-grow">{renderContent()}</main>
+      <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-12">
+          <div className="mb-12 text-center sm:text-left">
+            <h4 className="text-[11px] font-black uppercase tracking-widest mb-10">Contacts</h4>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-12">
+              {[
+                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
+                { name: 'Anna Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz' },
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz' }
+              ].map((c, i) => (
+                <div key={i} className="text-left"><p className="font-bold text-sm mb-1">{c.name}</p><p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p><a href={`mailto:${c.email}`} className="text-xs hover:underline opacity-80">{c.email}</a></div>
+              ))}
+            </div>
+          </div>
+          <div className="pt-12 border-t flex flex-col items-center">
+            <img src="/CIOS_Logos_partners.png" className="h-20 w-auto mb-10 object-contain" alt="CIOS Partners" />
+            <p className="text-[11px] text-center max-w-3xl leading-relaxed">Co-funded by the European Regional Development Fund, project CIOS, no. CZ.02.01.01/00/23_025/0008690.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
