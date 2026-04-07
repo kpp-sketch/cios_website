@@ -338,9 +338,9 @@ export default function App() {
             <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
               {[
                 { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
                 { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
-                { name: 'Kateřina Pospíchalová Pavlov', role: 'Project Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' },
-                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' }
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Project Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' }
               ].map((c, i) => (
                 <div key={i} className="min-w-[150px]">
                   <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
