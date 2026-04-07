@@ -72,72 +72,6 @@ export default function App() {
     borderGray: '#E5E7EB'
   };
 
-  const colors = {
-    navy: '#0A192F', 
-
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      // 1. Načtení souboru (cesta musí odpovídat umístění na GitHubu)
-      const response = await fetch('/data/team.xlsx');
-      const arrayBuffer = await response.arrayBuffer();
-      
-      // 2. Čtení Excelu
-      const workbook = XLSX.read(arrayBuffer);
-      const sheetName = workbook.SheetNames[0]; // Vezme první list
-      const worksheet = workbook.Sheets[sheetName];
-      
-      // 3. Převod na data, se kterými web umí pracovat
-      const rawData = XLSX.utils.sheet_to_json(worksheet);
-      
-      // 4. Důležitá úprava: sjednocení "researcher" na "research" a rozdělení skupin
-      const formattedData = rawData.map(person => ({
-        ...person,
-        groups: person.groups ? person.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
-      }));
-
-      setTeamMembers(formattedData);
-    } catch (error) {
-      console.error("Chyba při načítání Excelu:", error);
-    }
-  };
-
-  fetchData();
-}, []);
-
-/**
- * Robustly resolve asset paths.
- * We hardcode the production base but allow local preview to work via relative paths.
- */
-const getAssetUrl = (filename) => {
-  const isLocal = typeof window !== 'undefined' && 
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  
-  // Hardcoded production base for GitHub Pages
-  const prodBase = '/';
-  const base = isLocal ? '/' : prodBase;
-
-  const normalizedBase = base.endsWith('/') ? base : base + '/';
-  const normalizedFile = filename.startsWith('/') ? filename.slice(1) : filename;
-  return `${normalizedBase}${normalizedFile}`;
-};
-
-// ==========================================
-// 2. WEBSITE COMPONENTS
-// ==========================================
-
-export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
-
-  const colors = {
-    navy: '#0A192F', 
-    red: '#D12E41',
-    midBlueText: '#4A6582',
-    lightGray: '#F9FAFB',
-    borderGray: '#E5E7EB'
-  };
-
   const handleNavClick = (tab, sectionId = null) => {
     setActiveTab(tab);
     if (sectionId) {
@@ -154,7 +88,7 @@ export default function App() {
   };
 
   const PersonVignette = ({ member }) => {
-    const isAdminOnly = member.groups.includes('admin') && !member.groups.includes('research') && !member.groups.includes('isab');
+    const isAdminOnly = member.groups && member.groups.includes('admin') && !member.groups.includes('research');
     return (
       <div className="flex flex-col sm:flex-row gap-8 items-start mb-10 last:mb-0">
         <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center overflow-hidden rounded-lg">
@@ -199,11 +133,7 @@ export default function App() {
         <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
         {pub.abstract && (
           <div className="mb-4">
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" 
-              style={{ color: colors.red }}
-            >
+            <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" style={{ color: colors.red }}>
               Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
             </button>
             {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
@@ -240,39 +170,17 @@ export default function App() {
               <div className="max-w-6xl mx-auto mb-20">
                 <h2 className="text-sm font-black uppercase tracking-[0.2em] mb-6 text-center" style={{ color: colors.red }}>Featured Research</h2>
                 <div className="bg-slate-50 border rounded-2xl p-8 sm:p-12 relative overflow-hidden" style={{ borderColor: colors.borderGray }}>
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full opacity-50 -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none"></div>
-                  <div className="relative z-10 w-full max-w-none">
+                  <div className="relative z-10 w-full">
                     <div className="flex items-center gap-3 mb-4">
                       <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-white shadow-sm rounded" style={{ color: colors.red }}>
                         {(featuredPub.type || '').replace('-', ' ')}
                       </span>
                       <span className="text-sm font-bold" style={{ color: colors.navy }}>{featuredPub.year}</span>
                     </div>
-                    {/* Scale down the title slightly: 3xl to 4xl is often more proportionate than 5xl */}
-                    <h3 
-                      className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 leading-tight cursor-pointer hover:underline transition-colors w-full" 
-                      style={{ color: colors.navy }}
-                      onClick={() => handleNavClick('publications', featuredPub.id)}
-                    >
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 leading-tight cursor-pointer hover:underline" style={{ color: colors.navy }} onClick={() => handleNavClick('publications', featuredPub.id)}>
                       {featuredPub.title}
                     </h3>
                     <p className="text-lg font-bold mb-6" style={{ color: colors.midBlueText }}>{featuredPub.authors}</p>
-                    {featuredPub.abstract && (
-                      <div className="mb-4">
-                        <button 
-                          onClick={() => setIsFeaturedOpen(!isFeaturedOpen)} 
-                          className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" 
-                          style={{ color: colors.red }}
-                        >
-                          Abstract {isFeaturedOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
-                        </button>
-                        {isFeaturedOpen && (
-                          <p className="mt-4 p-5 bg-white/60 rounded-lg text-base italic leading-relaxed font-medium max-w-4xl border border-slate-100" style={{ color: colors.midBlueText }}>
-                            {featuredPub.abstract}
-                          </p>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
@@ -355,13 +263,7 @@ export default function App() {
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
             <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
             <p className="text-lg leading-relaxed font-medium mb-6" style={{ color: colors.midBlueText }}>
-              The <strong>Center for Inequality and Open Society (CIOS)</strong> is a major interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.
-            </p>
-            <p className="text-lg leading-relaxed font-medium mb-6" style={{ color: colors.midBlueText }}>
-              While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced quantitative methods, machine learning, and field experiments to analyze critical issues.
-            </p>
-            <p className="text-lg leading-relaxed font-medium mb-12" style={{ color: colors.midBlueText }}>
-              The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.
+              The <strong>Center for Inequality and Open Society (CIOS)</strong> is a major interdisciplinary research initiative.
             </p>
             <div id="about-wp" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
@@ -378,26 +280,6 @@ export default function App() {
                 ))}
               </div>
             </div>
-            <div id="about-management" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
-              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
-              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-12">
-                {teamMembers.filter(m => m.groups && m.groups.includes('management')).map((m, idx) => (
-                  <div key={idx}>
-                    <h4 className="font-bold text-lg" style={{ color: colors.navy }}>{m.name}</h4>
-                    <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{m.role}</p>
-                    <a href={`mailto:${m.email}`} className="text-sm font-medium hover:underline block" style={{ color: colors.midBlueText }}>{m.email}</a>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div id="about-isab" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
-              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
-              <div className="space-y-12">
-                {teamMembers.filter(m => m.groups && m.groups.includes('isab')).map((member, idx) => (
-                  <PersonVignette key={idx} member={member} />
-                ))}
-              </div>
-            </div>
           </div>
         );
       default: return null;
@@ -406,7 +288,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
       <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
           <div className="cursor-pointer flex items-center h-full" onClick={() => handleNavClick('home')}>
@@ -415,41 +296,9 @@ export default function App() {
           <div className="flex h-full">
             {['home', 'people', 'publications', 'about'].map(tab => (
               <div key={tab} className="h-full flex flex-col justify-center px-5 relative group">
-                <button 
-                  onClick={() => handleNavClick(tab)} 
-                  className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1" 
-                  style={{ 
-                    color: activeTab === tab ? colors.navy : colors.midBlueText,
-                    borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent'
-                  }}
-                >
+                <button onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1" style={{ color: activeTab === tab ? colors.navy : colors.midBlueText, borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent' }}>
                   {tab}
                 </button>
-                {(tab === 'people' || tab === 'publications' || tab === 'about') && activeTab === tab && (
-                  <div className="absolute top-[70%] right-5 flex gap-6 w-max pt-0">
-                    {tab === 'people' && (
-                      <>
-                        <button onClick={() => handleNavClick('people')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Researchers</button>
-                        <button onClick={() => handleNavClick('people', 'future-generation')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Future Generation</button>
-                      </>
-                    )}
-                    {tab === 'publications' && (
-                      <>
-                        <button onClick={() => handleNavClick('publications')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Working Papers</button>
-                        <button onClick={() => handleNavClick('publications', 'pub-articles')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Articles</button>
-                        <button onClick={() => handleNavClick('publications', 'pub-chapters')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Chapters</button>
-                      </>
-                    )}
-                    {tab === 'about' && (
-                      <>
-                        <button onClick={() => handleNavClick('about')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Overview</button>
-                        <button onClick={() => handleNavClick('about', 'about-wp')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Work Packages</button>
-                        <button onClick={() => handleNavClick('about', 'about-management')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Management</button>
-                        <button onClick={() => handleNavClick('about', 'about-isab')} className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]">Advisory Board</button>
-                      </>
-                    )}
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -458,32 +307,8 @@ export default function App() {
       <main className="flex-grow">{renderContent()}</main>
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center sm:text-left">
-          <div className="mb-12">
-            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-10" style={{ color: colors.navy }}>Contacts</h4>
-            <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
-              {[
-                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
-                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },      
-                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' }
-              ].map((c, i) => (
-                <div key={i} className="min-w-[150px]">
-                  <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
-                  <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p>
-                  <a href={`mailto:${c.email}`} className="text-xs font-medium hover:underline block opacity-80" style={{ color: colors.midBlueText }}>{c.email}</a>
-                </div>
-              ))}
-            </div>
-          </div>
           <div className="pt-12 border-t flex flex-col items-center" style={{ borderColor: colors.borderGray }}>
-            <img 
-              src={getAssetUrl('CIOS_Logos_partners.png')} 
-              className="h-20 w-auto mb-10 object-contain" 
-              style={{ imageRendering: 'high-quality' }}
-              alt="CIOS Partners" 
-              onError={e => e.target.style.display='none'} 
-            />
-            <p className="text-[11px] font-medium text-center max-w-3xl leading-relaxed" style={{ color: '#4A6582' }}>Co-funded by the European Regional Development Fund, project Center for Inequality and Open Society, no. CZ.02.01.01/00/23_025/0008690.</p>
+            <img src={getAssetUrl('CIOS_Logos_partners.png')} className="h-20 w-auto mb-10 object-contain" alt="CIOS Partners" onError={e => e.target.style.display='none'} />
           </div>
         </div>
       </footer>
