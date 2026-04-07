@@ -242,18 +242,29 @@ export default function App() {
             </section>
           </div>
         );
-      case 'publications':
+case 'publications':
         const wps = publicationsData.filter(p => p.type === 'working-paper');
         const articles = publicationsData.filter(p => p.type === 'journal-article');
+        const chapters = publicationsData.filter(p => p.type === 'book-chapter'); // Tady přidáváme filtr pro kapitoly
+        
         return (
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
+            {/* Sekce Working Papers */}
             <section id="pub-working-papers" className="mb-16 scroll-mt-32">
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Working Papers</h2>
               {wps.length > 0 ? <div className="space-y-10">{wps.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div> : <p className="italic">No working papers listed yet.</p>}
             </section>
-            <section id="pub-articles" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
+
+            {/* Sekce Journal Articles */}
+            <section id="pub-articles" className="pt-10 mt-10 mb-16 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Journal Articles</h2>
               {articles.length > 0 ? <div className="space-y-10">{articles.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div> : <p className="italic">No articles listed yet.</p>}
+            </section>
+
+            {/* NOVÁ SEKCE: Book Chapters */}
+            <section id="pub-chapters" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
+              <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Book Chapters</h2>
+              {chapters.length > 0 ? <div className="space-y-10">{chapters.map((pub, idx) => <PublicationItem key={idx} pub={pub} />)}</div> : <p className="italic">No book chapters listed yet.</p>}
             </section>
           </div>
         );
