@@ -43,22 +43,34 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/team.xlsx');
-        if (!response.ok) throw new Error('Excel file not found');
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer);
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const rawData = XLSX.utils.sheet_to_json(worksheet);
-        
-        const formattedData = rawData.map(person => ({
-          ...person,
-          groups: person.groups ? person.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
-        }));
+        // 1. NAČTENÍ TÝMU
+        const teamRes = await fetch('/team.xlsx');
+        if (teamRes.ok) {
+          const teamBuf = await teamRes.arrayBuffer();
+          const teamWb = XLSX.read(teamBuf);
+          const teamData = XLSX.utils.sheet_to_json(teamWb.Sheets[teamWb.SheetNames[0]]);
+          
+          const formattedTeam = teamData.map(person => ({
+            ...person,
+            groups: person.groups ? person.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
+          }));
+          setTeamMembers(formattedTeam);
+        }
 
-        setTeamMembers(formattedData);
+        // 2. NAČTENÍ PUBLIKACÍ
+        const pubRes = await fetch('/publications.xlsx');
+        if (pubRes.ok) {
+          const pubBuf = await pubRes.arrayBuffer();
+          const pubWb = XLSX.read(pubBuf);
+          const pubData = XLSX.utils.sheet_to_json(pubWb.Sheets[pubWb.SheetNames[0]]);
+          
+          // Seřadíme podle roku (nejnovější nahoře), pokud je v Excelu sloupec 'year'
+          const sortedPubs = pubData.sort((a, b) => (b.year || 0) - (a.year || 0));
+          setPublicationsData(sortedPubs);
+        }
+
       } catch (error) {
-        console.error("Excel Load Error:", error);
+        console.error("Chyba při načítání Excelů:", error);
       }
     };
     fetchData();
