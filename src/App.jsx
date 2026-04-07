@@ -131,8 +131,68 @@ export default function App() {
     );
   };
 
-  const PublicationItem = ({ pub }) => {
+const PublicationItem = ({ pub }) => {
     const [isOpen, setIsOpen] = useState(false);
+    
+    // Tato funkce "očistí" odkaz od mezer a vynutí externí otevření
+    const formatLink = (url) => {
+      if (!url || url === '#' || url === '') return null;
+      
+      // Odstraní neviditelné znaky a mezery
+      const cleanUrl = String(url).trim(); 
+
+      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+        return cleanUrl;
+      }
+      // Pokud tam https chybí, přidáme ho
+      return `https://${cleanUrl}`;
+    };
+
+    const finalLink = formatLink(pub.link || pub.repo);
+
+    return (
+      <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32">
+        <div className="flex items-center gap-3 mb-1">
+          <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
+          <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
+            {pub.journal || (pub.type || '').replace('-', ' ')}
+          </span>
+        </div>
+        <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
+        <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+        
+        {pub.abstract && (
+          <div className="mb-4">
+            <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" style={{ color: colors.red }}>
+              Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
+            </button>
+            {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
+          </div>
+        )}
+
+        <div className="flex gap-6 text-sm font-bold">
+          {pub.pdf && pub.pdf !== '#' && (
+            <a href={formatLink(pub.pdf)} target="_blank" rel="noopener noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+              <FileDown className="w-4 h-4 mr-2" /> PDF
+            </a>
+          )}
+          {finalLink && (
+            <a 
+              href={finalLink} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center hover:underline" 
+              style={{ color: colors.navy }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Library className="w-4 h-4 mr-2" /> 
+              {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  };
     return (
       <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32">
         <div className="flex items-center gap-3 mb-1">
