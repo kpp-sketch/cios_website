@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import * as XLSX from 'xlsx';
 import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
-
-import * as XLSX from 'xlsx'; // UNCOMMENT THIS FOR PRODUCTION BUILDS
 
 // ==========================================
 // 1. DATA CONFIGURATION (MOCK JSON FOR PREVIEW)
@@ -21,8 +20,43 @@ const futureGeneration = [
   { name: 'Placeholder Baby 2', parent: 'Michal Šoltés', year: '2025' }
 ];
 
-const [teamMembers, setTeamMembers] = useState([]);
-const [publicationsData, setPublicationsData] = useState([]);
+export default function App() {
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [publicationsData, setPublicationsData] = useState([]);
+  const [activeTab, setActiveTab] = useState('home');
+  const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Cesta k souboru musí začínat lomítkem
+        const response = await fetch('/data/team.xlsx');
+        if (!response.ok) throw new Error('Excel nebyl nalezen');
+        const arrayBuffer = await response.arrayBuffer();
+        
+        const workbook = XLSX.read(arrayBuffer);
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        
+        // Načtení dat z tabulky
+        const rawData = XLSX.utils.sheet_to_json(worksheet);
+        
+        // Vyčištění dat (převod researcher -> research)
+        const formattedData = rawData.map(person => ({
+          ...person,
+          groups: person.groups ? person.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
+        }));
+
+        setTeamMembers(formattedData);
+      } catch (error) {
+        console.error("Chyba Excelu:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const colors = {
+    navy: '#0A192F', 
 
 useEffect(() => {
   const fetchData = async () => {
