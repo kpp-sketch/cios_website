@@ -143,6 +143,7 @@ export default function App() {
         </div>
         <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
         <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+        
         {pub.abstract && (
           <div className="mb-4">
             <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" style={{ color: colors.red }}>
@@ -151,6 +152,21 @@ export default function App() {
             {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
           </div>
         )}
+
+        {/* SEKCE S ODKAZY A IKONKOU KNIHOVNY */}
+        <div className="flex gap-6 text-sm font-bold">
+          {pub.pdf && pub.pdf !== '#' && (
+            <a href={pub.pdf} className="flex items-center hover:underline" style={{ color: colors.navy }}>
+              <FileDown className="w-4 h-4 mr-2" /> PDF
+            </a>
+          )}
+          {(pub.repo || pub.link) && (
+            <a href={pub.repo || pub.link} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+              <Library className="w-4 h-4 mr-2" /> 
+              {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
+            </a>
+          )}
+        </div>
       </div>
     );
   };
