@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
 
 // ==========================================
-// 1. DATA CONFIGURATION (MOCK JSON FOR PREVIEW)
+// 1. DATA CONFIGURATION
 // ==========================================
 
 const workPackages = [
@@ -20,6 +20,20 @@ const futureGeneration = [
   { name: 'Placeholder Baby 2', parent: 'Michal Šoltés', year: '2025' }
 ];
 
+const getAssetUrl = (filename) => {
+  const isLocal = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const prodBase = '/';
+  const base = isLocal ? '/' : prodBase;
+  const normalizedBase = base.endsWith('/') ? base : base + '/';
+  const normalizedFile = filename.startsWith('/') ? filename.slice(1) : filename;
+  return `${normalizedBase}${normalizedFile}`;
+};
+
+// ==========================================
+// 2. WEBSITE COMPONENTS
+// ==========================================
+
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [publicationsData, setPublicationsData] = useState([]);
@@ -29,19 +43,14 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Cesta k souboru musí začínat lomítkem
         const response = await fetch('/data/team.xlsx');
-        if (!response.ok) throw new Error('Excel nebyl nalezen');
+        if (!response.ok) throw new Error('Excel file not found');
         const arrayBuffer = await response.arrayBuffer();
-        
         const workbook = XLSX.read(arrayBuffer);
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
-        
-        // Načtení dat z tabulky
         const rawData = XLSX.utils.sheet_to_json(worksheet);
         
-        // Vyčištění dat (převod researcher -> research)
         const formattedData = rawData.map(person => ({
           ...person,
           groups: person.groups ? person.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
@@ -49,11 +58,19 @@ export default function App() {
 
         setTeamMembers(formattedData);
       } catch (error) {
-        console.error("Chyba Excelu:", error);
+        console.error("Excel Load Error:", error);
       }
     };
     fetchData();
   }, []);
+
+  const colors = {
+    navy: '#0A192F', 
+    red: '#D12E41',
+    midBlueText: '#4A6582',
+    lightGray: '#F9FAFB',
+    borderGray: '#E5E7EB'
+  };
 
   const colors = {
     navy: '#0A192F', 
