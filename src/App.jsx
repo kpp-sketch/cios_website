@@ -33,7 +33,7 @@ const getAssetUrl = (filename) => {
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
   
   // Hardcoded production base for GitHub Pages
-  const prodBase = '/cios_website/';
+  const prodBase = '/';
   const base = isLocal ? '/' : prodBase;
 
   const normalizedBase = base.endsWith('/') ? base : base + '/';
