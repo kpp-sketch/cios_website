@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
 
 // ==========================================
-// 1. DATA CONFIGURATION (STATICKÉ SEKCE)
+// 1. DATA CONFIGURATION
 // ==========================================
 
 const workPackages = [
@@ -57,7 +57,6 @@ export default function App() {
         }));
 
         setTeamMembers(formattedData);
-        // Poznámka: Publikace zatím zůstávají prázdné pole, dokud nebudou v Excelu nebo JSONu
       } catch (error) {
         console.error("Excel Load Error:", error);
       }
@@ -159,7 +158,7 @@ export default function App() {
                 An interdisciplinary initiative applying empirical, experimental, and theoretical research across philosophy, law, economics, political science, and psychology to address critical challenges in modern open societies.
               </p>
             </div>
-            {featuredPub.title && (
+            {featuredPub && featuredPub.title && (
               <div className="max-w-6xl mx-auto mb-20">
                 <h2 className="text-sm font-black uppercase tracking-[0.2em] mb-6 text-center" style={{ color: colors.red }}>Featured Research</h2>
                 <div className="bg-slate-50 border rounded-2xl p-8 sm:p-12 relative overflow-hidden" style={{ borderColor: colors.borderGray }}>
@@ -293,7 +292,6 @@ export default function App() {
     <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
       
-      {/* HEADER & NAV */}
       <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
           <div className="cursor-pointer flex items-center h-full" onClick={() => handleNavClick('home')}>
@@ -312,7 +310,6 @@ export default function App() {
                 >
                   {tab}
                 </button>
-                {/* SUBMENU PRO LEPŠÍ NAVIGACI */}
                 {(tab === 'people' || tab === 'publications' || tab === 'about') && activeTab === tab && (
                   <div className="absolute top-[70%] right-5 flex gap-6 w-max pt-0">
                     {tab === 'people' && (
@@ -332,10 +329,8 @@ export default function App() {
         </div>
       </nav>
 
-      {/* MAIN CONTENT */}
       <main className="flex-grow">{renderContent()}</main>
 
-      {/* FOOTER - TADY BYLY TY KONTAKTY */}
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center sm:text-left">
           <div className="mb-12">
