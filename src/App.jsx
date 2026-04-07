@@ -43,7 +43,7 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/data/team.xlsx');
+        const response = await fetch('/team.xlsx');
         if (!response.ok) throw new Error('Excel file not found');
         const arrayBuffer = await response.arrayBuffer();
         const workbook = XLSX.read(arrayBuffer);
