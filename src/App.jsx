@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
 
-import siteData from './data.json'; // UNCOMMENT THIS FOR PRODUCTION BUILDS
+import * as XLSX from 'xlsx'; // UNCOMMENT THIS FOR PRODUCTION BUILDS
 
 // ==========================================
 // 1. DATA CONFIGURATION (MOCK JSON FOR PREVIEW)
@@ -21,8 +21,38 @@ const futureGeneration = [
   { name: 'Placeholder Baby 2', parent: 'Michal Šoltés', year: '2025' }
 ];
 
-const teamMembers = siteData.team || [];
-const publicationsData = siteData.publications || [];
+const [teamMembers, setTeamMembers] = useState([]);
+const [publicationsData, setPublicationsData] = useState([]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      // 1. Načtení souboru (cesta musí odpovídat umístění na GitHubu)
+      const response = await fetch('/data/team.xlsx');
+      const arrayBuffer = await response.arrayBuffer();
+      
+      // 2. Čtení Excelu
+      const workbook = XLSX.read(arrayBuffer);
+      const sheetName = workbook.SheetNames[0]; // Vezme první list
+      const worksheet = workbook.Sheets[sheetName];
+      
+      // 3. Převod na data, se kterými web umí pracovat
+      const rawData = XLSX.utils.sheet_to_json(worksheet);
+      
+      // 4. Důležitá úprava: sjednocení "researcher" na "research" a rozdělení skupin
+      const formattedData = rawData.map(person => ({
+        ...person,
+        groups: person.groups ? person.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
+      }));
+
+      setTeamMembers(formattedData);
+    } catch (error) {
+      console.error("Chyba při načítání Excelu:", error);
+    }
+  };
+
+  fetchData();
+}, []);
 
 /**
  * Robustly resolve asset paths.
