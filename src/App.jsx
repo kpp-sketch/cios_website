@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
 
 // ==========================================
-// 1. DATA CONFIGURATION
+// 1. GLOBÁLNÍ POMOCNÉ FUNKCE A DATA
 // ==========================================
 
 const workPackages = [
@@ -23,22 +23,72 @@ const futureGeneration = [
 const getAssetUrl = (filename) => {
   const isLocal = typeof window !== 'undefined' && 
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const prodBase = '/';
-  const base = isLocal ? '/' : prodBase;
+  const base = isLocal ? '/' : '/';
   const normalizedBase = base.endsWith('/') ? base : base + '/';
   const normalizedFile = filename.startsWith('/') ? filename.slice(1) : filename;
   return `${normalizedBase}${normalizedFile}`;
 };
 
+const formatLink = (url) => {
+  if (!url || url === '#' || url === '') return null;
+  const cleanUrl = String(url).trim();
+  if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) return cleanUrl;
+  return `https://${cleanUrl}`;
+};
+
 // ==========================================
-// 2. WEBSITE COMPONENTS
+// 2. KOMPONENTY
+// ==========================================
+
+const PublicationItem = ({ pub, colors }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const finalLink = formatLink(pub.link || pub.repo);
+  
+  return (
+    <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32 text-left">
+      <div className="flex items-center gap-3 mb-1">
+        <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
+        <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
+          {pub.journal || (pub.type || '').replace('-', ' ')}
+        </span>
+      </div>
+      <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
+      <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+      
+      {pub.abstract && (
+        <div className="mb-4">
+          <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" style={{ color: colors.red }}>
+            Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
+          </button>
+          {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
+        </div>
+      )}
+
+      <div className="flex gap-6 text-sm font-bold">
+        {pub.pdf && pub.pdf !== '#' && (
+          <a href={formatLink(pub.pdf)} target="_blank" rel="noopener noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+            <FileDown className="w-4 h-4 mr-2" /> PDF
+          </a>
+        )}
+        {finalLink && (
+          <a href={finalLink} target="_blank" rel="noopener noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+            <Library className="w-4 h-4 mr-2" /> 
+            {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ==========================================
+// 3. HLAVNÍ APLIKACE
 // ==========================================
 
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [publicationsData, setPublicationsData] = useState([]);
   const [activeTab, setActiveTab] = useState('home');
-  const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
 
   const colors = {
     navy: '#0A192F', 
@@ -90,77 +140,65 @@ export default function App() {
     }
   };
 
-  const formatLink = (url) => {
-    if (!url || url === '#' || url === '') return null;
-    const cleanUrl = String(url).trim();
-    if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) return cleanUrl;
-    return `https://${cleanUrl}`;
-  };
-
-  const PublicationItem = ({ pub }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const finalLink = formatLink(pub.link || pub.repo);
-    return (
-      <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32 text-left">
-        <div className="flex items-center gap-3 mb-1">
-          <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
-          <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
-            {pub.journal || (pub.type || '').replace('-', ' ')}
-          </span>
-        </div>
-        <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
-        <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
-        {pub.abstract && (
-          <div className="mb-4">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center transition hover:opacity-70" style={{ color: colors.red }}>
-              Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
-            </button>
-            {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic leading-relaxed" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
-          </div>
-        )}
-        <div className="flex gap-6 text-sm font-bold">
-          {pub.pdf && pub.pdf !== '#' && (
-            <a href={formatLink(pub.pdf)} target="_blank" rel="noopener noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
-              <FileDown className="w-4 h-4 mr-2" /> PDF
-            </a>
-          )}
-          {finalLink && (
-            <a href={finalLink} target="_blank" rel="noopener noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
-              <Library className="w-4 h-4 mr-2" /> 
-              {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
-            </a>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const PersonVignette = ({ member }) => {
-    const isAdminOnly = member.groups && member.groups.includes('admin') && !member.groups.includes('research');
-    return (
-      <div className="flex flex-col sm:flex-row gap-8 items-start mb-10 last:mb-0 text-left">
-        <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center overflow-hidden rounded-lg">
-          <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }}/>
-        </div>
-        <div className="flex-grow pt-1">
-          <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
-          <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
-            {member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
-          </p>
-          {!isAdminOnly && <p className="text-base font-medium leading-relaxed mb-4 max-w-2xl" style={{ color: colors.midBlueText }}>{member.bio}</p>}
-          <div className="flex flex-wrap gap-6 text-sm font-bold">
-            {member.email && (
-              <a href={`mailto:${member.email}`} className="flex items-center hover:underline" style={{ color: colors.navy }}>
-                <Mail className="w-4 h-4 mr-2 opacity-70" /> {member.email}
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
         const recentUpdates = publicationsData.slice(0, 3);
+        return (
+          <div className="animate-in fade-in duration-500 py-12 px-6 sm:px-12 bg-white">
+            <div className="max-w-5xl mx-auto text-center mb-16 mt-8">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight tracking-tight px-4" style={{ color: colors.navy }}>Center for Inequality and <br className="hidden sm:block" /> Open Society</h1>
+              <p className="text-xl leading-relaxed font-medium max-w-3xl mx-auto" style={{ color: colors.midBlueText }}>An interdisciplinary initiative applying empirical research to address challenges in modern open societies.</p>
+            </div>
+            <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-16 border-t pt-16" style={{ borderColor: colors.borderGray }}>
+              <div className="md:col-span-2">
+                <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Updates</h2>
+                <div className="space-y-8">
+                  {recentUpdates.length > 0 ? recentUpdates.map((pub, idx) => (
+                    <div key={idx} className="text-left">
+                      <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{pub.type}</span>
+                      <h3 className="text-xl font-bold mt-1 mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
+                      <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+                    </div>
+                  )) : <p className="italic">New updates coming soon.</p>}
+                </div>
+              </div>
+              <div className="p-8 bg-slate-50 rounded-xl border shadow-sm h-fit text-left" style={{ borderColor: colors.borderGray }}>
+                <h3 className="text-xl font-bold mb-4" style={{ color: colors.navy }}>Research Seminars</h3>
+                <p className="text-sm font-medium mb-6">Join our regular sessions on empirical legal studies and economics.</p>
+                <a href="https://www.prf.cuni.cz/en/department-economics-and-empirical-legal-studies/vspee-research-seminars-law-economics-and-empirics" target="_blank" rel="noreferrer" className="text-[10px] font-black uppercase tracking-widest flex items-center hover:underline" style={{ color: colors.red }}>View Schedule <ExternalLink className="w-3 h-3 ml-2" /></a>
+              </div>
+            </div>
+          </div>
+        );
+      case 'people':
+        const alphabeticalTeam = teamMembers
+          .filter(m => m.groups && (m.groups.includes('research') || m.groups.includes('admin')))
+          .sort((a, b) => (a.surname || '').localeCompare((b.surname || ''), 'cs')); 
+        return (
+          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Our People</h2>
+            <div className="space-y-10">
+              {alphabeticalTeam.map((member, idx) => (
+                <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start text-left">
+                  <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center overflow-hidden rounded-lg"><Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }}/></div>
+                  <div className="flex-grow pt-1">
+                    <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
+                    <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>{member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}</p>
+                    <div className="flex flex-wrap gap-6 text-sm font-bold">{member.email && <a href={`mailto:${member.email}`} className="flex items-center hover:underline" style={{ color: colors.navy }}><Mail className="w-4 h-4 mr-2 opacity-70" /> {member.email}</a>}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      case 'publications':
+        const wps = publicationsData.filter(p => p.type === 'working-paper');
+        const articles = publicationsData.filter(p => p.type === 'journal-article');
+        const chapters = publicationsData.filter(p => p.type === 'book-chapter');
+        return (
+          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Publications</h2>
+            <section className="mb-16"><h3 className="text-2xl font-bold mb-6 text-left">Working Papers</h3>{wps.length > 0 ? wps.map((p, i) => <PublicationItem key={i} pub={p} colors={colors} />) : <p className="italic text-left">No working papers yet.</p>}</section>
+            <section className="pt-10 border-t mb-16"><h3 className="text-2xl font-bold mb-6 text-left">Journal Articles</h3>{articles.length > 0 ? articles.map((p, i) => <PublicationItem key={i} pub={p} colors={colors} />) : <p className="italic text-left">No articles yet.</p>}</section>
+            <section className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6 text-left">Book Chapters</h3>{chapters.length > 0 ? chapters.map((p, i) => <PublicationItem key={i} pub={p} colors={colors}
