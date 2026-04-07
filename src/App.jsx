@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Mail, MapPin, ExternalLink, BookOpen, Users, FileText, ChevronDown, FileDown, Library, Globe, Heart } from 'lucide-react';
+import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Heart } from 'lucide-react';
 
 // ==========================================
-// 1. GLOBÁLNÍ POMOCNÉ FUNKCE A DATA
+// 1. DATA & POMOCNÉ FUNKCE
 // ==========================================
 
 const workPackages = [
@@ -19,15 +19,6 @@ const futureGeneration = [
   { name: 'Placeholder Baby 1', parent: 'Josef Montag', year: '2024' },
   { name: 'Placeholder Baby 2', parent: 'Michal Šoltés', year: '2025' }
 ];
-
-const getAssetUrl = (filename) => {
-  const isLocal = typeof window !== 'undefined' && 
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const base = isLocal ? '/' : '/';
-  const normalizedBase = base.endsWith('/') ? base : base + '/';
-  const normalizedFile = filename.startsWith('/') ? filename.slice(1) : filename;
-  return `${normalizedBase}${normalizedFile}`;
-};
 
 const formatLink = (url) => {
   if (!url || url === '#' || url === '') return null;
@@ -45,7 +36,7 @@ const PublicationItem = ({ pub, colors }) => {
   const finalLink = formatLink(pub.link || pub.repo);
   
   return (
-    <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32 text-left">
+    <div className="mb-8 last:mb-0 text-left">
       <div className="flex items-center gap-3 mb-1">
         <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
         <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
@@ -94,7 +85,6 @@ export default function App() {
     navy: '#0A192F', 
     red: '#D12E41',
     midBlueText: '#4A6582',
-    lightGray: '#F9FAFB',
     borderGray: '#E5E7EB'
   };
 
@@ -125,19 +115,9 @@ export default function App() {
     fetchData();
   }, []);
 
-  const handleNavClick = (tab, sectionId = null) => {
+  const handleNavClick = (tab) => {
     setActiveTab(tab);
-    if (sectionId) {
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const y = element.getBoundingClientRect().top + window.scrollY - 130;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }
-      }, 100);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const renderContent = () => {
@@ -145,17 +125,17 @@ export default function App() {
       case 'home':
         const recentUpdates = publicationsData.slice(0, 3);
         return (
-          <div className="animate-in fade-in duration-500 py-12 px-6 sm:px-12 bg-white">
+          <div className="py-12 px-6 sm:px-12 bg-white">
             <div className="max-w-5xl mx-auto text-center mb-16 mt-8">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight tracking-tight px-4" style={{ color: colors.navy }}>Center for Inequality and <br className="hidden sm:block" /> Open Society</h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight" style={{ color: colors.navy }}>Center for Inequality and <br className="hidden sm:block" /> Open Society</h1>
               <p className="text-xl leading-relaxed font-medium max-w-3xl mx-auto" style={{ color: colors.midBlueText }}>An interdisciplinary initiative applying empirical research to address challenges in modern open societies.</p>
             </div>
             <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-16 border-t pt-16" style={{ borderColor: colors.borderGray }}>
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 text-left">
                 <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Updates</h2>
                 <div className="space-y-8">
                   {recentUpdates.length > 0 ? recentUpdates.map((pub, idx) => (
-                    <div key={idx} className="text-left">
+                    <div key={idx}>
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{pub.type}</span>
                       <h3 className="text-xl font-bold mt-1 mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
                       <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
@@ -190,6 +170,18 @@ export default function App() {
                 </div>
               ))}
             </div>
+            <section className="pt-10 border-t mt-20">
+              <div className="flex items-center gap-3 mb-8"><Heart className="w-6 h-6" style={{ color: colors.red }} /><h2 className="text-3xl font-bold" style={{ color: colors.navy }}>Future Generation</h2></div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+                {futureGeneration.map((baby, idx) => (
+                  <div key={idx} className="text-center">
+                    <div className="aspect-square bg-slate-100 rounded-full mb-4 flex items-center justify-center"><Heart className="w-8 h-8 opacity-10" /></div>
+                    <h4 className="font-bold text-sm">{baby.name}</h4>
+                    <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{baby.year}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         );
       case 'publications':
@@ -201,4 +193,4 @@ export default function App() {
             <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Publications</h2>
             <section className="mb-16"><h3 className="text-2xl font-bold mb-6 text-left">Working Papers</h3>{wps.length > 0 ? wps.map((p, i) => <PublicationItem key={i} pub={p} colors={colors} />) : <p className="italic text-left">No working papers yet.</p>}</section>
             <section className="pt-10 border-t mb-16"><h3 className="text-2xl font-bold mb-6 text-left">Journal Articles</h3>{articles.length > 0 ? articles.map((p, i) => <PublicationItem key={i} pub={p} colors={colors} />) : <p className="italic text-left">No articles yet.</p>}</section>
-            <section className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6 text-left">Book Chapters</h3>{chapters.length > 0 ? chapters.map((p, i) => <PublicationItem key={i} pub={p} colors={colors}
+            <section className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6 text-left">Book Chapters</h3>{chapters.length > 0 ? chapters.map((p, i) => <PublicationItem key={i} pub={p} colors={colors} />) : <p className="italic text-left">No book
