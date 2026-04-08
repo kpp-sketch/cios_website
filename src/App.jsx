@@ -196,4 +196,91 @@ export default function App() {
             <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
             <div className="grid gap-10 mb-20">
               {[
-                { id: 'WP1', title: 'Digital Public Sphere', leader: 'Volker
+                { id: 'WP1', title: 'Digital Public Sphere', leader: 'Volker Kaul', desc: 'Examining how social media influence public discourse and contribute to societal polarization.' },
+                { id: 'WP2', title: 'Inequality in Justice', leader: 'Michal Šoltés', desc: 'Analyzing the causes and consequences of inequalities in court rulings using unique data from Czech and Dutch judges.' },
+                { id: 'WP3', title: 'Information Support for Criminal Justice (PRECID)', leader: 'Josef Montag', desc: 'Developing PRECID software to provide judges with data-driven and algorithmic support for decision-making.' },
+                { id: 'WP4', title: 'Finance, Innovation, and Inequality', leader: 'Eva Horváthová', desc: 'Investigating the macroeconomic links between financial systems, technological innovation, and wealth distribution.' },
+                { id: 'WP5', title: 'Legal Aspects of Vulnerability', leader: 'Veronika Bílková', desc: 'Exploring how legal frameworks address and sometimes exacerbate societal vulnerabilities.' },
+                { id: 'WP6', title: 'The Digitally Vulnerable Consumer', leader: 'Jakub Harašta', desc: 'Researching consumer protection and behavioral impacts in digital markets and online platforms.' }
+              ].map(wp => (
+                <div key={wp.id} className="border-l-4 pl-6 py-2" style={{ borderColor: colors.red }}>
+                  <h4 className="text-xl font-bold"><span style={{ color: colors.red }}>{wp.id}</span> {wp.title}</h4>
+                  <p className="text-sm font-bold my-1">Leader: <span className="font-normal" style={{ color: colors.midBlueText }}>{wp.leader}</span></p>
+                  <p className="text-base" style={{ color: colors.midBlueText }}>{wp.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
+            <div className="grid sm:grid-cols-2 gap-x-12 gap-y-8 mb-20">
+              {[
+                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
+                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' },
+                { name: 'Karolína Martínek', role: 'Data Steward & Open Access Officer', email: 'karolina.nova95@gmail.com' }
+              ].map((m, i) => (
+                <div key={i} className="text-left">
+                  <p className="font-bold text-lg mb-0">{m.name}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{m.role}</p>
+                  <a href={`mailto:${m.email}`} className="text-sm hover:underline opacity-80">{m.email}</a>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
+            <div className="space-y-10">
+              {isabMembers.map((member, idx) => (
+                <div key={idx} className="flex flex-col gap-2 items-start text-left">
+                  <div className="flex items-center gap-3">
+                    <h4 className="text-xl font-bold">{member.name}</h4>
+                    <a href={member.link} target="_blank" rel="noreferrer" className="p-1.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" title="Personal Website">
+                      <Globe className="w-4 h-4" style={{ color: colors.red }} />
+                    </a>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      default: return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
+      <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
+        <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
+          <div className="cursor-pointer" onClick={() => handleNavClick('home')}><img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" /></div>
+          <div className="flex gap-8">
+            {['home', 'people', 'publications', 'about'].map(tab => (
+              <button key={tab} onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-widest pb-1" style={{ color: activeTab === tab ? colors.navy : colors.midBlueText, borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent' }}>{tab}</button>
+            ))}
+          </div>
+        </div>
+      </nav>
+      <main className="flex-grow">{renderContent()}</main>
+      <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center">
+            <h4 className="text-[11px] font-black uppercase tracking-widest mb-10">Contacts</h4>
+            <div className="flex flex-wrap justify-center gap-12 mb-12">
+              {[
+                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
+                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
+                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
+                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' }
+              ].map((c, i) => (
+                <div key={i} className="text-left"><p className="font-bold text-sm mb-1">{c.name}</p><p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p><a href={`mailto:${c.email}`} className="text-xs hover:underline opacity-80">{c.email}</a></div>
+              ))}
+            </div>
+          <div className="pt-12 border-t flex flex-col items-center">
+            <img src="/CIOS_Logos_partners.png" className="h-20 w-auto mb-10 object-contain" alt="CIOS Partners" />
+            <p className="text-[11px] text-center max-w-3xl leading-relaxed">Co-funded by the European Regional Development Fund, project CIOS, no. CZ.02.01.01/00/23_025/0008690.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
