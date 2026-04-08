@@ -23,18 +23,18 @@ export default function App() {
       label: 'Publications',
       sub: [
         { label: 'Working Papers', id: 'working-papers' },
-        { label: 'Journal Articles', id: 'journal-articles' },
-        { label: 'Book Chapters', id: 'book-chapters' }
+        { label: 'Articles', id: 'journal-articles' },
+        { label: 'Chapters', id: 'book-chapters' }
       ]
     },
     { 
       id: 'about', 
       label: 'About',
       sub: [
-        { label: 'The Project', id: 'the-project' },
+        { label: 'Overview', id: 'the-project' },
         { label: 'Work Packages', id: 'work-packages' },
         { label: 'Management', id: 'management' },
-        { label: 'ISAB', id: 'isab-board' }
+        { label: 'Advisory Board', id: 'isab-board' }
       ]
     }
   ];
@@ -207,7 +207,12 @@ export default function App() {
                   <div className="flex-grow pt-1">
                     <h4 className="text-xl font-bold mb-1">{member.name}</h4>
                     <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>{member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}</p>
-                    {member.email && <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline"><Mail className="w-4 h-4 mr-2" /> {member.email}</a>}
+                    <div className="flex flex-col gap-1 mt-2">
+                      {member.email && <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline"><Mail className="w-4 h-4 mr-2" /> {member.email}</a>}
+                      <a href={member.website || '#'} target="_blank" rel="noreferrer" className="flex items-center text-sm font-bold hover:underline" style={{ color: colors.midBlueText }}>
+                        <Globe className="w-4 h-4 mr-2" /> Personal Website
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -231,8 +236,8 @@ export default function App() {
           <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
             <h2 id="the-project" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
             <div className="space-y-6 text-lg leading-relaxed mb-16">
-              <p>The Center for Inequality and Open Society (CIOS) is a major interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.</p>
-              <p>While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced quantitative methods, machine learning, and field experiments to analyze critical issues.</p>
+              <p>The Center for Inequality and Open Society (CIOS) is an interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.</p>
+              <p>While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced qualitative and quantitative methods, machine learning, and field experiments to analyze critical issues.</p>
               <p>The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.</p>
             </div>
 
@@ -274,14 +279,17 @@ export default function App() {
             <h2 id="isab-board" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
             <div className="space-y-10">
               {isabMembers.map((member, idx) => (
-                <div key={idx} className="flex flex-col gap-2 items-start text-left">
-                  <div className="flex items-center gap-3">
-                    <h4 className="text-xl font-bold">{member.name}</h4>
-                    <a href={member.link} target="_blank" rel="noreferrer" className="p-1.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" title="Personal Website">
-                      <Globe className="w-4 h-4" style={{ color: colors.red }} />
-                    </a>
+                <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
+                  <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100"><Users className="w-8 h-8 opacity-10" /></div>
+                  <div className="flex-grow pt-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h4 className="text-xl font-bold">{member.name}</h4>
+                      <a href={member.link} target="_blank" rel="noreferrer" className="p-1.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" title="Personal Website">
+                        <Globe className="w-4 h-4" style={{ color: colors.red }} />
+                      </a>
+                    </div>
+                    <p className="text-sm leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
                   </div>
-                  <p className="text-sm leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
                 </div>
               ))}
             </div>
@@ -291,70 +299,51 @@ export default function App() {
     }
   };
 
+  const displayNav = navStructure.find(n => n.id === (hoverTab || activeTab));
+
   return (
     <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-        .nav-dropdown {
-          display: none;
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          transform: translateX(-50%);
-          background: white;
-          min-width: 180px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          border-radius: 4px;
-          padding: 8px 0;
-          z-index: 100;
-        }
-        .nav-item:hover .nav-dropdown, .nav-item.active .nav-dropdown {
-          display: block;
-        }
-      `}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
       
-      <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
-        <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
-          <div className="cursor-pointer" onClick={() => handleNavClick('home')}>
-            <img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" />
+      <nav 
+        className="sticky top-0 z-50 bg-white shadow-sm py-6 transition-all duration-300" 
+        onMouseLeave={() => setHoverTab(null)}
+      >
+        <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center">
+          <div className="cursor-pointer shrink-0" onClick={() => handleNavClick('home')}>
+            <img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-20 object-contain" />
           </div>
           
-          <div className="flex gap-8">
-            {navStructure.map(item => (
-              <div 
-                key={item.id} 
-                className={`relative nav-item flex items-center h-full ${activeTab === item.id ? 'active' : ''}`}
-                onMouseEnter={() => setHoverTab(item.id)}
-                onMouseLeave={() => setHoverTab(null)}
-              >
+          <div className="flex flex-col items-end gap-3 mt-2">
+            <div className="flex gap-8">
+              {navStructure.map(item => (
                 <button 
+                  key={item.id}
                   onClick={() => handleNavClick(item.id)} 
-                  className="text-[11px] font-black uppercase tracking-widest pb-1 flex items-center gap-1 transition-colors"
+                  onMouseEnter={() => setHoverTab(item.id)}
+                  className="text-[11px] font-black uppercase tracking-widest pb-1 transition-colors"
                   style={{ 
                     color: activeTab === item.id || hoverTab === item.id ? colors.navy : colors.midBlueText, 
                     borderBottom: activeTab === item.id ? `2px solid ${colors.red}` : '2px solid transparent' 
                   }}
                 >
                   {item.label}
-                  {item.sub && <ChevronDown className={`w-3 h-3 transition-transform ${hoverTab === item.id ? 'rotate-180' : ''}`} />}
                 </button>
-
-                {item.sub && (
-                  <div className="nav-dropdown animate-in fade-in slide-in-from-top-2 duration-200">
-                    {item.sub.map(subItem => (
-                      <button
-                        key={subItem.id}
-                        onClick={() => handleNavClick(item.id, subItem.id)}
-                        className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-wider hover:bg-slate-50 transition-colors"
-                        style={{ color: colors.midBlueText }}
-                      >
-                        {subItem.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
+            
+            <div className="flex gap-6 h-5 transition-opacity duration-200">
+              {displayNav && displayNav.sub && displayNav.sub.map(subItem => (
+                <button
+                  key={subItem.id}
+                  onClick={() => handleNavClick(displayNav.id, subItem.id)}
+                  className="text-[10px] font-black uppercase tracking-widest hover:text-navy transition-colors"
+                  style={{ color: colors.midBlueText }}
+                >
+                  {subItem.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </nav>
