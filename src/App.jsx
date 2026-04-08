@@ -6,6 +6,7 @@ export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [publicationsData, setPublicationsData] = useState([]);
   const [activeTab, setActiveTab] = useState('home');
+  const [hoverTab, setHoverTab] = useState(null);
 
   const colors = {
     navy: '#0A192F', 
@@ -13,6 +14,30 @@ export default function App() {
     midBlueText: '#4A6582',
     borderGray: '#E5E7EB'
   };
+
+  const navStructure = [
+    { id: 'home', label: 'Home' },
+    { id: 'people', label: 'People' },
+    { 
+      id: 'publications', 
+      label: 'Publications',
+      sub: [
+        { label: 'Working Papers', id: 'working-papers' },
+        { label: 'Journal Articles', id: 'journal-articles' },
+        { label: 'Book Chapters', id: 'book-chapters' }
+      ]
+    },
+    { 
+      id: 'about', 
+      label: 'About',
+      sub: [
+        { label: 'The Project', id: 'the-project' },
+        { label: 'Work Packages', id: 'work-packages' },
+        { label: 'Management', id: 'management' },
+        { label: 'ISAB', id: 'isab-board' }
+      ]
+    }
+  ];
 
   const isabMembers = [
     {
@@ -69,9 +94,27 @@ export default function App() {
     fetchData();
   }, []);
 
-  const handleNavClick = (tab) => {
-    setActiveTab(tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleNavClick = (tabId, sectionId = null) => {
+    setActiveTab(tabId);
+    if (!sectionId) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const offset = 140; 
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
   };
 
   const scrollToPublication = (title) => {
@@ -178,22 +221,22 @@ export default function App() {
         return (
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Publications</h2>
-            <section className="mb-16"><h3 className="text-2xl font-bold mb-6">Working Papers</h3>{wps.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
-            <section className="pt-10 border-t mb-16"><h3 className="text-2xl font-bold mb-6">Journal Articles</h3>{articles.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
-            <section className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6">Book Chapters</h3>{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
+            <section id="working-papers" className="mb-16 pt-4"><h3 className="text-2xl font-bold mb-6">Working Papers</h3>{wps.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
+            <section id="journal-articles" className="pt-10 border-t mb-16"><h3 className="text-2xl font-bold mb-6">Journal Articles</h3>{articles.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
+            <section id="book-chapters" className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6">Book Chapters</h3>{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
           </div>
         );
       case 'about':
         return (
           <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
-            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
+            <h2 id="the-project" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
             <div className="space-y-6 text-lg leading-relaxed mb-16">
               <p>The Center for Inequality and Open Society (CIOS) is a major interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.</p>
               <p>While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced quantitative methods, machine learning, and field experiments to analyze critical issues.</p>
               <p>The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.</p>
             </div>
 
-            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
+            <h2 id="work-packages" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
             <div className="grid gap-10 mb-20">
               {[
                 { id: 'WP1', title: 'Digital Public Sphere', leader: 'Volker Kaul', desc: 'Examining how social media influence public discourse and contribute to societal polarization.' },
@@ -211,7 +254,7 @@ export default function App() {
               ))}
             </div>
 
-            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
+            <h2 id="management" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
             <div className="grid sm:grid-cols-2 gap-x-12 gap-y-8 mb-20">
               {[
                 { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
@@ -228,7 +271,7 @@ export default function App() {
               ))}
             </div>
 
-            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
+            <h2 id="isab-board" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
             <div className="space-y-10">
               {isabMembers.map((member, idx) => (
                 <div key={idx} className="flex flex-col gap-2 items-start text-left">
@@ -250,18 +293,74 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+        .nav-dropdown {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          background: white;
+          min-width: 180px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          border-radius: 4px;
+          padding: 8px 0;
+          z-index: 100;
+        }
+        .nav-item:hover .nav-dropdown, .nav-item.active .nav-dropdown {
+          display: block;
+        }
+      `}</style>
+      
       <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
-          <div className="cursor-pointer" onClick={() => handleNavClick('home')}><img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" /></div>
+          <div className="cursor-pointer" onClick={() => handleNavClick('home')}>
+            <img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" />
+          </div>
+          
           <div className="flex gap-8">
-            {['home', 'people', 'publications', 'about'].map(tab => (
-              <button key={tab} onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-widest pb-1" style={{ color: activeTab === tab ? colors.navy : colors.midBlueText, borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent' }}>{tab}</button>
+            {navStructure.map(item => (
+              <div 
+                key={item.id} 
+                className={`relative nav-item flex items-center h-full ${activeTab === item.id ? 'active' : ''}`}
+                onMouseEnter={() => setHoverTab(item.id)}
+                onMouseLeave={() => setHoverTab(null)}
+              >
+                <button 
+                  onClick={() => handleNavClick(item.id)} 
+                  className="text-[11px] font-black uppercase tracking-widest pb-1 flex items-center gap-1 transition-colors"
+                  style={{ 
+                    color: activeTab === item.id || hoverTab === item.id ? colors.navy : colors.midBlueText, 
+                    borderBottom: activeTab === item.id ? `2px solid ${colors.red}` : '2px solid transparent' 
+                  }}
+                >
+                  {item.label}
+                  {item.sub && <ChevronDown className={`w-3 h-3 transition-transform ${hoverTab === item.id ? 'rotate-180' : ''}`} />}
+                </button>
+
+                {item.sub && (
+                  <div className="nav-dropdown animate-in fade-in slide-in-from-top-2 duration-200">
+                    {item.sub.map(subItem => (
+                      <button
+                        key={subItem.id}
+                        onClick={() => handleNavClick(item.id, subItem.id)}
+                        className="w-full text-left px-4 py-2 text-[10px] font-bold uppercase tracking-wider hover:bg-slate-50 transition-colors"
+                        style={{ color: colors.midBlueText }}
+                      >
+                        {subItem.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
       </nav>
+
       <main className="flex-grow">{renderContent()}</main>
+
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center">
             <h4 className="text-[11px] font-black uppercase tracking-widest mb-10">Contacts</h4>
