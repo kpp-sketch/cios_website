@@ -46,10 +46,35 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollToPublication = (title) => {
+    // 1. Přepneme na záložku publikací
+    setActiveTab('publications');
+    
+    // 2. Krátký timeout, aby se stihla vykreslit stránka Publications v DOMu
+    setTimeout(() => {
+      const elements = document.getElementsByTagName('h3');
+      const target = Array.from(elements).find(el => el.innerText.trim() === title.trim());
+      
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Volitelný vizuální efekt: krátké zvýraznění pozadí cílové publikace
+        const container = target.closest('.mb-8');
+        if (container) {
+          container.style.transition = 'background-color 0.5s';
+          container.style.backgroundColor = '#f1f5f9';
+          setTimeout(() => {
+            container.style.backgroundColor = 'transparent';
+          }, 1500);
+        }
+      }
+    }, 150);
+  };
+
   const PublicationItem = ({ pub }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-      <div className="mb-8 last:mb-0 text-left">
+      <div className="mb-8 last:mb-0 text-left p-2 rounded-lg transition-colors">
         <div className="flex items-center gap-3 mb-1">
           <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
           <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
@@ -89,9 +114,13 @@ export default function App() {
                 <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Updates</h2>
                 <div className="space-y-8">
                   {recentUpdates.map((pub, idx) => (
-                    <div key={idx}>
+                    <div 
+                      key={idx} 
+                      className="cursor-pointer group"
+                      onClick={() => scrollToPublication(pub.title)}
+                    >
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{pub.type}</span>
-                      <h3 className="text-xl font-bold mt-1 mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
+                      <h3 className="text-xl font-bold mt-1 mb-2 leading-snug group-hover:underline decoration-slate-300" style={{ color: colors.navy }}>{pub.title}</h3>
                       <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
                     </div>
                   ))}
