@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library } from 'lucide-react';
+import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe } from 'lucide-react';
 
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -13,6 +13,34 @@ export default function App() {
     midBlueText: '#4A6582',
     borderGray: '#E5E7EB'
   };
+
+  const isabMembers = [
+    {
+      name: "Anna Louisa Bindler",
+      link: "https://sites.google.com/site/annabindler/",
+      bio: "Professor of Economics at the University of Cologne. Her research focuses, among other topics, on gender disparities in judicial decision-making, sanctions and recidivism, and the impact of crime on its victims."
+    },
+    {
+      name: "Susann Fiedler",
+      link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
+      bio: "Professor of Psychology and Head of the Institute for Cognition and Behavior at the Department of Strategy and Innovation, Vienna University of Economics and Business. Her specialization includes research on human decision-making, discrimination, and perceptions of inequality."
+    },
+    {
+      name: "Barbara Havelková",
+      link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
+      bio: "Professor of Law at the Faculty of Law, University of Oxford, and Tutorial Fellow in Law at St Hilda’s College. Her extensive research and publications cover equality and anti-discrimination law, constitutional law, and gender legal studies."
+    },
+    {
+      name: "Elena Kantorowicz-Reznichenko",
+      link: "https://kantorowicz-reznichenko.weebly.com/",
+      bio: "Professor of Quantitative Empirical Legal Studies at Erasmus University Rotterdam and Director of the international PhD program European Doctorate in Law and Economics (EDLE). Her research focuses on crime, behavioral and economic analysis of law, and international criminal law."
+    },
+    {
+      name: "Keren Weinshall",
+      link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
+      bio: "Professor of Law and Edward S. Silver Chair in Civil Procedure at the Faculty of Law, Hebrew University of Jerusalem. She has authored numerous books and academic articles using comparative and empirical methods to study judicial decision-making and the influence of factors such as workload, court composition diversity, and ideological preferences."
+    }
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,25 +75,17 @@ export default function App() {
   };
 
   const scrollToPublication = (title) => {
-    // 1. Přepneme na záložku publikací
     setActiveTab('publications');
-    
-    // 2. Krátký timeout, aby se stihla vykreslit stránka Publications v DOMu
     setTimeout(() => {
       const elements = document.getElementsByTagName('h3');
       const target = Array.from(elements).find(el => el.innerText.trim() === title.trim());
-      
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Volitelný vizuální efekt: krátké zvýraznění pozadí cílové publikace
         const container = target.closest('.mb-8');
         if (container) {
           container.style.transition = 'background-color 0.5s';
           container.style.backgroundColor = '#f1f5f9';
-          setTimeout(() => {
-            container.style.backgroundColor = 'transparent';
-          }, 1500);
+          setTimeout(() => container.style.backgroundColor = 'transparent', 1500);
         }
       }
     }, 150);
@@ -114,11 +134,7 @@ export default function App() {
                 <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Updates</h2>
                 <div className="space-y-8">
                   {recentUpdates.map((pub, idx) => (
-                    <div 
-                      key={idx} 
-                      className="cursor-pointer group"
-                      onClick={() => scrollToPublication(pub.title)}
-                    >
+                    <div key={idx} className="cursor-pointer group" onClick={() => scrollToPublication(pub.title)}>
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{pub.type}</span>
                       <h3 className="text-xl font-bold mt-1 mb-2 leading-snug group-hover:underline decoration-slate-300" style={{ color: colors.navy }}>{pub.title}</h3>
                       <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
@@ -141,7 +157,7 @@ export default function App() {
         return (
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Our People</h2>
-            <div className="space-y-10">
+            <div className="space-y-10 mb-20">
               {alphabeticalTeam.map((member, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
                   <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg"><Users className="w-10 h-10 opacity-20" /></div>
@@ -149,6 +165,24 @@ export default function App() {
                     <h4 className="text-xl font-bold mb-1">{member.name}</h4>
                     <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>{member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}</p>
                     {member.email && <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline"><Mail className="w-4 h-4 mr-2" /> {member.email}</a>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="text-2xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>ISAB (International Scientific Advisory Board)</h2>
+            <div className="space-y-12">
+              {isabMembers.map((member, idx) => (
+                <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
+                  <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100"><Users className="w-8 h-8 opacity-10" /></div>
+                  <div className="flex-grow pt-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h4 className="text-xl font-bold">{member.name}</h4>
+                      <a href={member.link} target="_blank" rel="noreferrer" className="p-1.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" title="Personal Website">
+                        <Globe className="w-4 h-4" style={{ color: colors.red }} />
+                      </a>
+                    </div>
+                    <p className="text-sm leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
                   </div>
                 </div>
               ))}
