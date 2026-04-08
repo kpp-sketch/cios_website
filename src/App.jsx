@@ -266,7 +266,7 @@ export default function App() {
                 { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
                 { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
                 { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' },
-                { name: 'Karolína Martínek', role: 'Data Steward & Open Access Officer', email: 'karolina.nova95@gmail.com' }
+                { name: 'Karolína Martínek', role: 'Data Steward & Open Access Officer', email: 'karolina.martinek@prf.cuni.cz' }
               ].map((m, i) => (
                 <div key={i} className="text-left">
                   <p className="font-bold text-lg mb-0">{m.name}</p>
