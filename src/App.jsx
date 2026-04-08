@@ -18,7 +18,7 @@ export default function App() {
     {
       name: "Anna Louisa Bindler",
       link: "https://sites.google.com/site/annabindler/",
-      bio: "Professor of Economics at the University of Cologne. Her research focuses, among other topics, on gender disparities in judicial decision-making, sanctions and recidivism, and the impact of crime on its victims."
+      bio: "Professor of Economics at the University of Gothenburg. Her research focuses, among other topics, on gender disparities in judicial decision-making, sanctions and recidivism, and the impact of crime on its victims."
     },
     {
       name: "Susann Fiedler",
@@ -28,7 +28,7 @@ export default function App() {
     {
       name: "Barbara Havelková",
       link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
-      bio: "Professor of Law at the Faculty of Law, University of Oxford, and Tutorial Fellow in Law at St Hilda’s College. Her extensive research and publications cover equality and anti-discrimination law, constitutional law, and gender legal studies."
+      bio: "Associate Professor of Law at the Faculty of Law, University of Oxford, and Tutorial Fellow in Law at St Hilda’s College. Her extensive research and publications cover equality and anti-discrimination law, constitutional law, and gender legal studies."
     },
     {
       name: "Elena Kantorowicz-Reznichenko",
@@ -38,7 +38,7 @@ export default function App() {
     {
       name: "Keren Weinshall",
       link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
-      bio: "Professor of Law and Edward S. Silver Chair in Civil Procedure at the Faculty of Law, Hebrew University of Jerusalem. She has authored numerous books and academic articles using comparative and empirical methods to study judicial decision-making and the influence of factors such as workload, court composition diversity, and ideological preferences."
+      bio: "Professor of Law and Edward S. Silver Chair in Civil Procedure at the Faculty of Law, Hebrew University of Jerusalem. She has authored numerous books and academic articles using comparative and empirical methods to study judicial decision-making."
     }
   ];
 
@@ -157,7 +157,7 @@ export default function App() {
         return (
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Our People</h2>
-            <div className="space-y-10 mb-20">
+            <div className="space-y-10">
               {alphabeticalTeam.map((member, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
                   <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg"><Users className="w-10 h-10 opacity-20" /></div>
@@ -166,21 +166,6 @@ export default function App() {
                     <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>{member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}</p>
                     {member.email && <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline"><Mail className="w-4 h-4 mr-2" /> {member.email}</a>}
                   </div>
-                </div>
-              ))}
-            </div>
-
-            <h2 className="text-2xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>ISAB (International Scientific Advisory Board)</h2>
-            <div className="space-y-10">
-              {isabMembers.map((member, idx) => (
-                <div key={idx} className="flex flex-col gap-2 items-start text-left">
-                  <div className="flex items-center gap-3">
-                    <h4 className="text-xl font-bold">{member.name}</h4>
-                    <a href={member.link} target="_blank" rel="noreferrer" className="p-1.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" title="Personal Website">
-                      <Globe className="w-4 h-4" style={{ color: colors.red }} />
-                    </a>
-                  </div>
-                  <p className="text-sm leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
                 </div>
               ))}
             </div>
@@ -200,50 +185,15 @@ export default function App() {
         );
       case 'about':
         return (
-          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
-            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About CIOS</h2>
-            <p className="text-lg mb-12">The Center for Inequality and Open Society (CIOS) is an interdisciplinary research initiative coordinated by the Faculty of Law, Charles University.</p>
-          </div>
-        );
-      default: return null;
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex flex-col font-montserrat bg-white" style={{ color: colors.navy }}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');`}</style>
-      <nav className="sticky top-0 z-50 bg-white shadow-sm h-32">
-        <div className="max-w-6xl mx-auto px-6 sm:px-12 flex justify-between items-center h-full">
-          <div className="cursor-pointer" onClick={() => handleNavClick('home')}><img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" /></div>
-          <div className="flex gap-8">
-            {['home', 'people', 'publications', 'about'].map(tab => (
-              <button key={tab} onClick={() => handleNavClick(tab)} className="text-[11px] font-black uppercase tracking-widest pb-1" style={{ color: activeTab === tab ? colors.navy : colors.midBlueText, borderBottom: activeTab === tab ? `2px solid ${colors.red}` : '2px solid transparent' }}>{tab}</button>
-            ))}
-          </div>
-        </div>
-      </nav>
-      <main className="flex-grow">{renderContent()}</main>
-      <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
-        <div className="max-w-6xl mx-auto px-6 sm:px-12">
-          <div className="mb-12 text-center sm:text-left">
-            <h4 className="text-[11px] font-black uppercase tracking-widest mb-10">Contacts</h4>
-            <div className="flex flex-wrap justify-center sm:justify-start gap-12">
-              {[
-                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-                { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
-                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
-                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' }
-              ].map((c, i) => (
-                <div key={i} className="text-left"><p className="font-bold text-sm mb-1">{c.name}</p><p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p><a href={`mailto:${c.email}`} className="text-xs hover:underline opacity-80">{c.email}</a></div>
-              ))}
+          <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
+            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
+            <div className="space-y-6 text-lg leading-relaxed mb-16">
+              <p>The Center for Inequality and Open Society (CIOS) is a major interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.</p>
+              <p>While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced quantitative methods, machine learning, and field experiments to analyze critical issues.</p>
+              <p>The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.</p>
             </div>
-          </div>
-          <div className="pt-12 border-t flex flex-col items-center">
-            <img src="/CIOS_Logos_partners.png" className="h-20 w-auto mb-10 object-contain" alt="CIOS Partners" />
-            <p className="text-[11px] text-center max-w-3xl leading-relaxed">Co-funded by the European Regional Development Fund, project CIOS, no. CZ.02.01.01/00/23_025/0008690.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+
+            <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
+            <div className="grid gap-10 mb-20">
+              {[
+                { id: 'WP1', title: 'Digital Public Sphere', leader: 'Volker
