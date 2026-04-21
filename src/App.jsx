@@ -209,38 +209,35 @@ const isabMembers = [
           </div>
         );
 case 'people':
+        const alphabeticalTeam = teamMembers
+          .filter(m => m.groups && (m.groups.includes('research') || m.groups.includes('admin')))
+          .sort((a, b) => (a.surname || '').localeCompare((b.surname || ''), 'cs')); 
         return (
-          <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
-            <h2 className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>People</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {people.map((member, idx) => (
-                <div key={idx} className="flex gap-6 items-start pb-8 border-b border-slate-100">
+          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
+            <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Our People</h2>
+            <div className="space-y-10">
+              {alphabeticalTeam.map((member, idx) => (
+                <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
                   <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
                     {member.photo ? (
-                      <img 
-                        src={`/people/${member.photo}`} 
-                        alt={member.name} 
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={`/people/${member.photo}`} alt={member.name} className="w-full h-full object-cover" />
                     ) : (
                       <Users className="w-10 h-10 opacity-20" />
                     )}
                   </div>
-                  
                   <div className="flex-grow pt-1">
-                    <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
+                    <h4 className="text-xl font-bold mb-1">{member.name}</h4>
                     <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
-                      {member.role}
+                      {member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
                     </p>
-                    
-                    <div className="flex flex-col gap-2 text-sm font-bold">
+                    <div className="flex flex-col gap-2 mt-2">
                       {member.email && (
-                        <a href={`mailto:${member.email}`} className="hover:underline flex items-center" style={{ color: colors.navy }}>
+                        <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline">
                           <Mail className="w-4 h-4 mr-2" /> {member.email}
                         </a>
                       )}
                       {member.website && (
-                        <a href={member.website} target="_blank" rel="noreferrer" className="hover:underline flex items-center" style={{ color: colors.navy }}>
+                        <a href={member.website} target="_blank" rel="noreferrer" className="flex items-center text-sm font-bold hover:underline" style={{ color: colors.midBlueText }}>
                           <Globe className="w-4 h-4 mr-2" /> Personal Website
                         </a>
                       )}
