@@ -298,6 +298,7 @@ export default function App() {
                 </div>
               ))}
             </div>
+           </div> {/* TUTO ZÁVORKU ZDE PŘIDEJTE */}
         );
       default: return null;
     }
