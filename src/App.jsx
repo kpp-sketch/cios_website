@@ -231,7 +231,7 @@ export default function App() {
             <section id="book-chapters" className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6">Book Chapters</h3>{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
           </div>
         );
-      case 'about':
+case 'about':
         return (
           <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
             <h2 id="the-project" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
@@ -276,16 +276,13 @@ export default function App() {
               ))}
             </div>
 
-<h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
+            <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
             <div className="space-y-8">
               {isabMembers.map((member, idx) => (
                 <div key={idx} className="flex gap-6 items-start pb-8 border-b border-slate-100 last:border-0">
-                  {/* Avatar box */}
                   <div className="w-20 h-20 shrink-0 bg-slate-50 flex items-center justify-center rounded border border-slate-100">
                     <Users className="w-8 h-8 opacity-20" />
                   </div>
-                  
-                  {/* Text content */}
                   <div className="flex-grow">
                     <div className="flex items-center gap-3 mb-2">
                       <h4 className="text-xl font-bold" style={{ color: colors.navy }}>{member.name}</h4>
@@ -298,7 +295,7 @@ export default function App() {
                 </div>
               ))}
             </div>
-           </div> {/* TUTO ZÁVORKU ZDE PŘIDEJTE */}
+          </div>
         );
       default: return null;
     }
