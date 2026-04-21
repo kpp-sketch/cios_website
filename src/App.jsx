@@ -276,24 +276,28 @@ export default function App() {
               ))}
             </div>
 
-            <h2 id="isab-board" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
-            <div className="space-y-10">
+<h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
+            <div className="space-y-8">
               {isabMembers.map((member, idx) => (
-                <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
-                  <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100"><Users className="w-8 h-8 opacity-10" /></div>
-                  <div className="flex-grow pt-1">
+                <div key={idx} className="flex gap-6 items-start pb-8 border-b border-slate-100 last:border-0">
+                  {/* Avatar box */}
+                  <div className="w-20 h-20 shrink-0 bg-slate-50 flex items-center justify-center rounded border border-slate-100">
+                    <Users className="w-8 h-8 opacity-20" />
+                  </div>
+                  
+                  {/* Text content */}
+                  <div className="flex-grow">
                     <div className="flex items-center gap-3 mb-2">
-                      <h4 className="text-xl font-bold">{member.name}</h4>
-                      <a href={member.link} target="_blank" rel="noreferrer" className="p-1.5 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" title="Personal Website">
+                      <h4 className="text-xl font-bold" style={{ color: colors.navy }}>{member.name}</h4>
+                      <a href={member.link} target="_blank" rel="noreferrer" className="transition-opacity hover:opacity-70">
                         <Globe className="w-4 h-4" style={{ color: colors.red }} />
                       </a>
                     </div>
-                    <p className="text-sm leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
+                    <p className="text-base leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
         );
       default: return null;
     }
