@@ -294,7 +294,9 @@ case 'about':
            <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
             <div className="space-y-12">
               {isabMembers.map((member, idx) => (
-                <div key={idx} className="border-b border-slate-100 pb-8 last:border-0">
+                <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start pb-8 border-b border-slate-100 last:border-0">
+                  <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100">
+                    <Users className="w-8 h-8 opacity-10" />
                   <h4 className="text-2xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
                   <p className="text-md font-bold mb-2" style={{ color: colors.red }}>
                     {member.role} <span className="text-slate-400 font-normal">|</span> {member.institution}
