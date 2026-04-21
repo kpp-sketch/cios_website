@@ -39,31 +39,46 @@ export default function App() {
     }
   ];
 
-  const isabMembers = [
+const isabMembers = [
     {
       name: "Anna Louisa Bindler",
+      role: "Professor of Economics",
+      institution: "University of Gothenburg",
       link: "https://sites.google.com/site/annabindler/",
-      bio: "Professor of Economics at the University of Gothenburg. Her research focuses, among other topics, on gender disparities in judicial decision-making, sanctions and recidivism, and the impact of crime on its victims."
+      email: "anna.bindler@gu.se",
+      bio: "Leading expertise in empirical legal studies and the economics of crime."
     },
     {
       name: "Susann Fiedler",
+      role: "Professor of Business Psychology",
+      institution: "Vienna University of Economics",
       link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
-      bio: "Professor of Psychology and Head of the Institute for Cognition and Behavior at the Department of Strategy and Innovation, Vienna University of Economics and Business. Her specialization includes research on human decision-making, discrimination, and perceptions of inequality."
+      email: "susann.fiedler@wu.ac.at",
+      bio: "Prominent researcher in behavioral economics and psychology."
     },
     {
       name: "Barbara Havelková",
+      role: "Associate Professor of Law",
+      institution: "University of Oxford",
       link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
-      bio: "Associate Professor of Law at the Faculty of Law, University of Oxford, and Tutorial Fellow in Law at St Hilda’s College. Her extensive research and publications cover equality and anti-discrimination law, constitutional law, and gender legal studies."
+      email: "barbara.havelkova@law.ox.ac.uk",
+      bio: "Specialist in gender legal studies, equality law, and comparative legal systems."
     },
     {
       name: "Elena Kantorowicz-Reznichenko",
+      role: "Professor of Quantitative Empirical Legal Studies",
+      institution: "Erasmus University",
       link: "https://kantorowicz-reznichenko.weebly.com/",
-      bio: "Professor of Quantitative Empirical Legal Studies at Erasmus University Rotterdam and Director of the international PhD program European Doctorate in Law and Economics (EDLE). Her research focuses on crime, behavioral and economic analysis of law, and international criminal law."
+      email: "kantorowicz@law.eur.nl",
+      bio: "Expert in the economic analysis of law and criminal justice systems."
     },
     {
       name: "Keren Weinshall",
+      role: "Professor of Law",
+      institution: "Hebrew University",
       link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
-      bio: "Professor of Law and Edward S. Silver Chair in Civil Procedure at the Faculty of Law, Hebrew University of Jerusalem. She has authored numerous books and academic articles using comparative and empirical methods to study judicial decision-making."
+      email: "keren.weinshall@mail.huji.ac.il",
+      bio: "Empirical researcher focusing on judicial decision-making and public law."
     }
   ];
 
@@ -276,21 +291,22 @@ case 'about':
               ))}
             </div>
 
-            <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
-            <div className="space-y-8">
+           <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
+            <div className="space-y-12">
               {isabMembers.map((member, idx) => (
-                <div key={idx} className="flex gap-6 items-start pb-8 border-b border-slate-100 last:border-0">
-                  <div className="w-20 h-20 shrink-0 bg-slate-50 flex items-center justify-center rounded border border-slate-100">
-                    <Users className="w-8 h-8 opacity-20" />
-                  </div>
-                  <div className="flex-grow">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="text-xl font-bold" style={{ color: colors.navy }}>{member.name}</h4>
-                      <a href={member.link} target="_blank" rel="noreferrer" className="transition-opacity hover:opacity-70">
-                        <Globe className="w-4 h-4" style={{ color: colors.red }} />
-                      </a>
-                    </div>
-                    <p className="text-base leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
+                <div key={idx} className="border-b border-slate-100 pb-8 last:border-0">
+                  <h4 className="text-2xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
+                  <p className="text-md font-bold mb-2" style={{ color: colors.red }}>
+                    {member.role} <span className="text-slate-400 font-normal">|</span> {member.institution}
+                  </p>
+                  <p className="text-base mb-4" style={{ color: colors.midBlueText }}>{member.bio}</p>
+                  <div className="flex gap-6 items-center text-sm font-bold">
+                    <a href={`mailto:${member.email}`} className="hover:underline flex items-center" style={{ color: colors.navy }}>
+                      <Mail className="w-4 h-4 mr-2" /> {member.email}
+                    </a>
+                    <a href={member.link} target="_blank" rel="noreferrer" className="hover:underline flex items-center" style={{ color: colors.navy }}>
+                      <Globe className="w-4 h-4 mr-2" /> Personal Website
+                    </a>
                   </div>
                 </div>
               ))}
