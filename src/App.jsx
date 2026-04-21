@@ -208,7 +208,7 @@ const isabMembers = [
             </div>
           </div>
         );
-      case 'people':
+case 'people':
         const alphabeticalTeam = teamMembers
           .filter(m => m.groups && (m.groups.includes('research') || m.groups.includes('admin')))
           .sort((a, b) => (a.surname || '').localeCompare((b.surname || ''), 'cs')); 
@@ -218,15 +218,29 @@ const isabMembers = [
             <div className="space-y-10">
               {alphabeticalTeam.map((member, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
-                  <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg"><Users className="w-10 h-10 opacity-20" /></div>
+                  <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
+                    {member.photo ? (
+                      <img src={`/people/${member.photo}`} alt={member.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <Users className="w-10 h-10 opacity-20" />
+                    )}
+                  </div>
                   <div className="flex-grow pt-1">
                     <h4 className="text-xl font-bold mb-1">{member.name}</h4>
-                    <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>{member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}</p>
-                    <div className="flex flex-col gap-1 mt-2">
-                      {member.email && <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline"><Mail className="w-4 h-4 mr-2" /> {member.email}</a>}
-                      <a href={member.website || '#'} target="_blank" rel="noreferrer" className="flex items-center text-sm font-bold hover:underline" style={{ color: colors.midBlueText }}>
-                        <Globe className="w-4 h-4 mr-2" /> Personal Website
-                      </a>
+                    <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
+                      {member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
+                    </p>
+                    <div className="flex flex-col gap-2 mt-2">
+                      {member.email && (
+                        <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline">
+                          <Mail className="w-4 h-4 mr-2" /> {member.email}
+                        </a>
+                      )}
+                      {member.website && (
+                        <a href={member.website} target="_blank" rel="noreferrer" className="flex items-center text-sm font-bold hover:underline" style={{ color: colors.midBlueText }}>
+                          <Globe className="w-4 h-4 mr-2" /> Personal Website
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
