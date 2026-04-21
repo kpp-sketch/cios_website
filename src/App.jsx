@@ -220,7 +220,7 @@ case 'people':
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
                   <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
                     {member.photo ? (
-                      <img src={`/people/${member.photo}`} alt={member.name} className="w-full h-full object-cover" />
+                      <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover" />
                     ) : (
                       <Users className="w-10 h-10 opacity-20" />
                     )}
