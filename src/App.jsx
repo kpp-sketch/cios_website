@@ -60,7 +60,7 @@ const isabMembers = [
       name: "Barbara Havelková",
       role: "Associate Professor of Law",
       institution: "University of Oxford",
-      link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
+      link: "https://www.law.ox.ac.uk/people/barbara-havelkova",
       email: "barbara.havelkova@law.ox.ac.uk",
       bio: "Specialist in gender legal studies, equality law, and comparative legal systems."
     },
