@@ -291,24 +291,27 @@ case 'about':
               ))}
             </div>
 
-           <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
-            <div className="space-y-12">
+            <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
+            <div className="space-y-10">
               {isabMembers.map((member, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start pb-8 border-b border-slate-100 last:border-0">
                   <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100">
                     <Users className="w-8 h-8 opacity-10" />
-                  <h4 className="text-2xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
-                  <p className="text-md font-bold mb-2" style={{ color: colors.red }}>
-                    {member.role} <span className="text-slate-400 font-normal">|</span> {member.institution}
-                  </p>
-                  <p className="text-base mb-4" style={{ color: colors.midBlueText }}>{member.bio}</p>
-                  <div className="flex gap-6 items-center text-sm font-bold">
-                    <a href={`mailto:${member.email}`} className="hover:underline flex items-center" style={{ color: colors.navy }}>
-                      <Mail className="w-4 h-4 mr-2" /> {member.email}
-                    </a>
-                    <a href={member.link} target="_blank" rel="noreferrer" className="hover:underline flex items-center" style={{ color: colors.navy }}>
-                      <Globe className="w-4 h-4 mr-2" /> Personal Website
-                    </a>
+                  </div>
+                  <div className="flex-grow pt-1">
+                    <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
+                    <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
+                      {member.role} <span className="mx-1 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.institution}</span>
+                    </p>
+                    <p className="text-base mb-4 leading-relaxed" style={{ color: colors.midBlueText }}>{member.bio}</p>
+                    <div className="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-sm font-bold">
+                      <a href={`mailto:${member.email}`} className="hover:underline flex items-center" style={{ color: colors.navy }}>
+                        <Mail className="w-4 h-4 mr-2" /> {member.email}
+                      </a>
+                      <a href={member.link} target="_blank" rel="noreferrer" className="hover:underline flex items-center" style={{ color: colors.navy }}>
+                        <Globe className="w-4 h-4 mr-2" /> Personal Website
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
