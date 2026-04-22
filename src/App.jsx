@@ -230,6 +230,12 @@ case 'people':
                     <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
                       {member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
                     </p>
+                    
+                    {/* TADY SE PŘIDÁVÁ BIO */}
+                    {member.bio && (
+                      <p className="text-sm mb-3" style={{ color: colors.midBlueText }}>{member.bio}</p>
+                    )}
+                    
                     <div className="flex flex-col gap-2 mt-2">
                       {member.email && (
                         <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline">
