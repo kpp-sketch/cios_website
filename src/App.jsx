@@ -85,7 +85,8 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const teamRes = await fetch('/team.xlsx');
+        // Načítání týmu (relativní cesta)
+        const teamRes = await fetch('team.xlsx');
         if (teamRes.ok) {
           const teamBuf = await teamRes.arrayBuffer();
           const teamWb = XLSX.read(teamBuf);
@@ -96,16 +97,20 @@ export default function App() {
           })));
         }
         
-        // Změna cesty na složku /data/
-        const pubRes = await fetch('/data/publications.xlsx');
+        // Načítání publikací ze složky data (relativní cesta bez počátečního lomítka)
+        const pubRes = await fetch('data/publications.xlsx');
         if (pubRes.ok) {
           const pubBuf = await pubRes.arrayBuffer();
           const pubWb = XLSX.read(pubBuf);
           const pubData = XLSX.utils.sheet_to_json(pubWb.Sheets[pubWb.SheetNames[0]]);
+          
+          // Seřazení a uložení do stavu
           setPublicationsData(pubData.sort((a, b) => (b.year || 0) - (a.year || 0)));
+        } else {
+          console.error("Soubor publications.xlsx nebyl nalezen v /public/data/");
         }
       } catch (error) {
-        console.error("Load Error:", error);
+        console.error("Chyba při načítání Excelu:", error);
       }
     };
     fetchData();
@@ -178,7 +183,7 @@ export default function App() {
             </a>
           )}
           
-          {/* Odkaz na Preprint - bere se ze sloupce "Preprint" */}
+          {/* Odkaz na Preprint (hledá sloupec "Preprint") */}
           {pub.Preprint && (
             <a href={pub.Preprint} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
               <FileText className="w-4 h-4 mr-2" /> Preprint
