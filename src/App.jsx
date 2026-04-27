@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe } from 'lucide-react';
+import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe, FileText } from 'lucide-react';
 
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -39,7 +39,7 @@ export default function App() {
     }
   ];
 
-const isabMembers = [
+  const isabMembers = [
     {
       name: "Anna Louisa Bindler",
       role: "Professor of Economics",
@@ -95,7 +95,9 @@ const isabMembers = [
             groups: p.groups ? p.groups.toString().split(',').map(g => g.trim().replace('researcher', 'research')) : []
           })));
         }
-        const pubRes = await fetch('/publications.xlsx');
+        
+        // Změna cesty na složku /data/
+        const pubRes = await fetch('/data/publications.xlsx');
         if (pubRes.ok) {
           const pubBuf = await pubRes.arrayBuffer();
           const pubWb = XLSX.read(pubBuf);
@@ -170,18 +172,19 @@ const isabMembers = [
           </div>
         )}
         <div className="flex gap-6 text-sm font-bold">
-          {pub.pdf && pub.pdf !== '#' && <a href={pub.pdf} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><FileDown className="w-4 h-4 mr-2" /> PDF</a>}
-          {(pub.link || pub.repo) && <a href={pub.link || pub.repo} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><Library className="w-4 h-4 mr-2" /> {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}</a>}
-       <a href={pub.Preprint} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+          {pub.pdf && pub.pdf !== '#' && (
+            <a href={pub.pdf} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
+              <FileDown className="w-4 h-4 mr-2" /> PDF
+            </a>
+          )}
+          
+          {/* Odkaz na Preprint - bere se ze sloupce "Preprint" */}
+          {pub.Preprint && (
+            <a href={pub.Preprint} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
               <FileText className="w-4 h-4 mr-2" /> Preprint
             </a>
           )}
 
-          {(pub.link || pub.repo) && (
-            <a href={pub.link || pub.repo} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
-              <Library className="w-4 h-4 mr-2" /> {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
-            </a>
-          )}
           {(pub.link || pub.repo) && (
             <a href={pub.link || pub.repo} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
               <Library className="w-4 h-4 mr-2" /> {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}
@@ -223,7 +226,7 @@ const isabMembers = [
             </div>
           </div>
         );
-case 'people':
+      case 'people':
         const alphabeticalTeam = teamMembers
           .filter(m => m.groups && (m.groups.includes('research') || m.groups.includes('admin')))
           .sort((a, b) => (a.surname || '').localeCompare((b.surname || ''), 'cs')); 
@@ -245,12 +248,9 @@ case 'people':
                     <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
                       {member.role} {member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span> <span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
                     </p>
-                    
-                    {/* TADY SE PŘIDÁVÁ BIO */}
                     {member.bio && (
                       <p className="text-sm mb-3" style={{ color: colors.midBlueText }}>{member.bio}</p>
                     )}
-                    
                     <div className="flex flex-col gap-2 mt-2">
                       {member.email && (
                         <a href={`mailto:${member.email}`} className="flex items-center text-sm font-bold hover:underline">
@@ -281,7 +281,7 @@ case 'people':
             <section id="book-chapters" className="pt-10 border-t"><h3 className="text-2xl font-bold mb-6">Book Chapters</h3>{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</section>
           </div>
         );
-case 'about':
+      case 'about':
         return (
           <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
             <h2 id="the-project" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
