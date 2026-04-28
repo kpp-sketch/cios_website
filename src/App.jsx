@@ -86,9 +86,11 @@ const isabMembers = [
 
       name: "Anna Louisa Bindler",
 
-      role: "Professor of Applied Microeconomics & Head of the Crime, Labor and Inequality Department",
+      role: "Professor of Applied Microeconomics",
+      role: "Head of the Crime, Labor and Inequality Department",
 
       institution: "University of Postdam & DIW Berlin",
+      institution: "DIW Berlin",
 
       link: "https://sites.google.com/site/annabindler/",
 
