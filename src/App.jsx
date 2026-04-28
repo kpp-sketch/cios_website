@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe } from 'lucide-react';
+import { 
+  Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe, Lock, 
+  Palmtree, BookOpen, ShoppingCart, PhoneCall, ArrowLeft, Banknote, Plane
+} from 'lucide-react';
 
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [publicationsData, setPublicationsData] = useState([]);
   const [activeTab, setActiveTab] = useState('home');
   const [hoverTab, setHoverTab] = useState(null);
+  
+  // Stavy pro Intranet a navigaci v něm
+  const [passwordInput, setPasswordInput] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authError, setAuthError] = useState(false);
+  const [activeResource, setActiveResource] = useState(null);
 
   const colors = {
     navy: '#0A192F', 
@@ -14,6 +23,8 @@ export default function App() {
     midBlueText: '#4A6582',
     borderGray: '#E5E7EB'
   };
+
+  const INTRANET_PASSWORD = "heslo123";
 
   const navStructure = [
     { id: 'home', label: 'Home' },
@@ -36,7 +47,8 @@ export default function App() {
         { label: 'Management', id: 'management' },
         { label: 'Advisory Board', id: 'isab-board' }
       ]
-    }
+    },
+    { id: 'intranet', label: 'Intranet' }
   ];
 
   const isabMembers = [
@@ -109,6 +121,7 @@ export default function App() {
 
   const handleNavClick = (tabId, sectionId = null) => {
     setActiveTab(tabId);
+    if (tabId !== 'intranet') setActiveResource(null);
     if (!sectionId) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -123,6 +136,16 @@ export default function App() {
           window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
       }, 100);
+    }
+  };
+
+  const handleAuth = (e) => {
+    e.preventDefault();
+    if (passwordInput === INTRANET_PASSWORD) {
+      setIsAuthenticated(true);
+      setAuthError(false);
+    } else {
+      setAuthError(true);
     }
   };
 
@@ -214,7 +237,7 @@ export default function App() {
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start">
                   <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
                     {member.photo ? (
-                      <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover" />
+                      <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" />
                     ) : (
                       <Users className="w-10 h-10 opacity-20" />
                     )}
@@ -331,6 +354,86 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        );
+      case 'intranet':
+        if (!isAuthenticated) {
+          return (
+            <div className="py-24 px-6 max-w-md mx-auto text-center">
+              <div className="bg-slate-50 p-10 rounded-2xl border border-slate-200">
+                <Lock className="w-12 h-12 mx-auto mb-6 opacity-20" />
+                <h2 className="text-2xl font-bold mb-2">Restricted Access</h2>
+                <p className="text-sm mb-8" style={{ color: colors.midBlueText }}>Please enter the password to access the project intranet.</p>
+                <form onSubmit={handleAuth} className="space-y-4">
+                  <input 
+                    type="password" 
+                    placeholder="Enter password"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2"
+                    style={{ borderColor: authError ? colors.red : colors.borderGray }}
+                  />
+                  {authError && <p className="text-xs font-bold" style={{ color: colors.red }}>Incorrect password. Please try again.</p>}
+                  <button 
+                    type="submit"
+                    className="w-full py-3 rounded-lg font-black uppercase tracking-widest text-white transition-opacity hover:opacity-90"
+                    style={{ backgroundColor: colors.navy }}
+                  >
+                    Login
+                  </button>
+                </form>
+              </div>
+            </div>
+          );
+        }
+
+        // Podstránky Intranetu
+        if (activeResource) {
+          const resources = {
+            travel: { title: 'Travel Information', content: 'Details about travel arrangements and conferences will be added here.' },
+            openaccess: { title: 'Open Access Guide', content: 'Guidelines for open access publishing and repository submissions.' },
+            orders: { title: 'Orders & Procurement', content: 'Information regarding equipment orders and administrative procedures.' },
+            contact: { title: 'Contact Us', content: 'Internal contact directory and support channels.' }
+          };
+          const res = resources[activeResource];
+          return (
+            <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
+              <button onClick={() => setActiveResource(null)} className="flex items-center text-xs font-black uppercase tracking-widest mb-8 hover:underline" style={{ color: colors.red }}>
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Resources
+              </button>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: colors.navy }}>{res.title}</h2>
+              <div className="p-8 bg-slate-50 rounded-xl border border-slate-100">
+                <p style={{ color: colors.midBlueText }}>{res.content}</p>
+              </div>
+            </div>
+          );
+        }
+
+        // Hlavní rozcestník Intranetu
+        return (
+          <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
+            <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Project Intranet</h2>
+            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>Resources for scientists</p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { id: 'travel', label: 'Travel', icon: <div className="relative"><Palmtree className="w-10 h-10"/><Plane className="w-5 h-5 absolute -top-1 -right-1 text-red-500 rotate-12"/></div> },
+                { id: 'openaccess', label: 'Open Access Guide', icon: <BookOpen className="w-10 h-10" /> },
+                { id: 'orders', label: 'Orders', icon: <div className="relative"><ShoppingCart className="w-10 h-10"/><Banknote className="w-5 h-5 absolute -bottom-1 -right-1 text-green-600"/></div> },
+                { id: 'contact', label: 'Contact us', icon: <div className="flex gap-1"><PhoneCall className="w-8 h-8"/><Mail className="w-8 h-8 opacity-40"/></div> }
+              ].map((item) => (
+                <button 
+                  key={item.id}
+                  onClick={() => setActiveResource(item.id)}
+                  className="flex flex-col items-center justify-center p-10 bg-white border border-slate-200 rounded-2xl transition-all hover:shadow-lg hover:border-red-200 group"
+                >
+                  <div className="mb-6 text-slate-300 group-hover:text-red-500 transition-colors">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-black uppercase tracking-widest text-center" style={{ color: colors.navy }}>{item.label}</span>
+                </button>
               ))}
             </div>
           </div>
