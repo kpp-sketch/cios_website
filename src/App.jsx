@@ -172,7 +172,7 @@ const isabMembers = [
 
       try {
 
-        const teamRes = await fetch('/team.xlsx');
+        const teamRes = await fetch('/team.xlsx?t=' + new Date().getTime());
 
         if (teamRes.ok) {
 
