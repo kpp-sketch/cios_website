@@ -86,13 +86,13 @@ const isabMembers = [
 
       name: "Anna Louisa Bindler",
 
-      role: "Professor of Economics",
+      role: "Professor of Applied Microeconomics & Head of the Crime, Labor and Inequality Department",
 
-      institution: "University of Gothenburg",
+      institution: "University of Postdam & DIW Berlin",
 
       link: "https://sites.google.com/site/annabindler/",
 
-      email: "anna.bindler@gu.se",
+      email: "abindler@diw.de",
 
       bio: "Leading expertise in empirical legal studies and the economics of crime."
 
