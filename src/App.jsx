@@ -55,8 +55,7 @@ export default function App() {
 
   const sendEmail = (resource) => {
     const to = "katerina.pospichalovapavlov@prf.cuni.cz";
-    const cc = "anna.mala@prf.cuni.cz";
-    const cc = "eva.mysakova@prf.cuni.cz";
+    const cc = "anna.mala@prf.cuni.cz, eva.mysakova@prf.cuni.cz";
     const subject = resource === 'travel' ? "Travel Notification" : "Order Notification";
     const body = formData[resource];
     window.location.href = `mailto:${to}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
