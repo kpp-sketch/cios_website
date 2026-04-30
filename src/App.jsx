@@ -12,7 +12,6 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [hoverTab, setHoverTab] = useState(null);
   
-  // Stavy pro Intranet a navigaci v něm
   const [passwordInput, setPasswordInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState(false);
@@ -362,7 +361,7 @@ export default function App() {
       case 'intranet':
         if (!isAuthenticated) {
           return (
-            <div className="py-24 px-6 max-w-md mx-auto text-center">
+            <div className="py-24 px-6 max-md mx-auto text-center">
               <div className="bg-slate-50 p-10 rounded-2xl border border-slate-200">
                 <Lock className="w-12 h-12 mx-auto mb-6 opacity-20" />
                 <h2 className="text-2xl font-bold mb-2">Restricted Access</h2>
@@ -390,7 +389,6 @@ export default function App() {
           );
         }
 
-        // Podstránky Intranetu
         if (activeResource) {
           const resources = {
             travel: { title: 'Travel & Invitations', content: 'Guidelines on how to proceed when planning a trip or accepting an international invitation.' },
@@ -417,54 +415,65 @@ export default function App() {
           );
         }
 
-        // Hlavní rozcestník Intranetu
         return (
           <div className="py-12 px-6 sm:px-12 max-w-6xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Project Intranet</h2>
             <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>How can we help you today?</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 { 
                     id: 'travel', 
-                    label: "I plan to travel / I've been invited abroad", 
+                    title: "I plan to travel",
+                    subtitle: "I've been invited abroad", 
                     icon: <div className="relative"><Plane className="w-10 h-10"/><Map className="w-5 h-5 absolute -bottom-1 -right-1 text-red-500"/></div> 
                 },
                 { 
                     id: 'orders', 
-                    label: 'I need to pay for something / I plan to buy something', 
+                    title: "I need to pay for something",
+                    subtitle: "I plan to buy something", 
                     icon: <div className="relative"><ShoppingCart className="w-10 h-10"/><CreditCard className="w-5 h-5 absolute -bottom-1 -right-1 text-green-600"/></div> 
                 },
                 { 
                     id: 'openaccess', 
-                    label: 'I plan to send my paper for peer-review', 
+                    title: "I plan to send my paper",
+                    subtitle: "for peer-review", 
                     icon: <div className="relative"><BookOpen className="w-10 h-10"/><Send className="w-5 h-5 absolute -top-1 -right-1 text-blue-500"/></div> 
                 },
                 { 
                     id: 'grants', 
-                    label: 'I want to apply for a grant', 
+                    title: "I want to apply",
+                    subtitle: "for a grant", 
                     icon: <Coins className="w-10 h-10" /> 
                 },
                 { 
                     id: 'collaboration', 
-                    label: 'My collaboration with academics from a different institution', 
+                    title: "My collaboration with academics",
+                    subtitle: "from a different institution", 
                     icon: <Handshake className="w-10 h-10" /> 
                 },
                 { 
                     id: 'mobility', 
-                    label: 'I would want to go on a longer study/work trip', 
+                    title: "I would want to go on a",
+                    subtitle: "longer study/work trip", 
                     icon: <Globe className="w-10 h-10" /> 
                 }
               ].map((item) => (
                 <button 
                   key={item.id}
                   onClick={() => setActiveResource(item.id)}
-                  className="flex flex-col items-center justify-center p-8 bg-white border border-slate-200 rounded-2xl transition-all hover:shadow-lg hover:border-red-200 group h-64"
+                  className="flex flex-col items-center justify-center p-10 bg-white border border-slate-200 rounded-3xl transition-all duration-300 hover:shadow-xl hover:border-red-300 hover:-translate-y-1 group h-72"
                 >
-                  <div className="mb-6 text-slate-300 group-hover:text-red-500 transition-colors">
+                  <div className="mb-8 text-slate-300 group-hover:text-red-500 transition-colors transform group-hover:scale-110 duration-300">
                     {item.icon}
                   </div>
-                  <span className="text-sm font-bold text-center leading-relaxed px-4" style={{ color: colors.navy }}>{item.label}</span>
+                  <div className="text-center space-y-2">
+                    <span className="block text-sm font-bold leading-tight uppercase tracking-wide" style={{ color: colors.navy }}>{item.title}</span>
+                    <hr className="w-8 mx-auto border-slate-100 group-hover:border-red-200 transition-colors" />
+                    {item.subtitle && (
+                        <span className="block text-[13px] font-medium italic opacity-70" style={{ color: colors.midBlueText }}>{item.subtitle}</span>
+                    )}
+                  </div>
                 </button>
               ))}
             </div>
