@@ -56,6 +56,7 @@ export default function App() {
   const sendEmail = (resource) => {
     const to = "katerina.pospichalovapavlov@prf.cuni.cz";
     const cc = "anna.mala@prf.cuni.cz";
+    const cc = "eva.mysakova@prf.cuni.cz";
     const subject = resource === 'travel' ? "Travel Notification" : "Order Notification";
     const body = formData[resource];
     window.location.href = `mailto:${to}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -437,7 +438,7 @@ export default function App() {
                   <p className="text-sm">Please write where you plan to go, for what purpose, and when.</p>
                   <textarea 
                     className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-red-100 outline-none text-sm min-h-[120px]"
-                    placeholder={isTravel ? "Example: I plan to go to Amsterdam for the EALE conference from Oct 10 to Oct 14." : "Example: I need to buy a new laptop for data analysis in WP3."}
+                    placeholder={isTravel ? "Example: I plan to go to Amsterdam for the EALE conference from Oct 10 to Oct 14." : "Example: I need to pay a submission fee for a journal."}
                     value={formData[activeResource]}
                     onChange={(e) => handleInputChange(activeResource, e.target.value)}
                   />
@@ -448,7 +449,7 @@ export default function App() {
                   >
                     <Send className="w-4 h-4" /> Send Notification
                   </button>
-                  <p className="text-[10px] text-slate-400">This will open an email to katerina.pospichalovapavlov@prf.cuni.cz (CC: anna.mala@prf.cuni.cz). You can also email them directly.</p>
+                  <p className="text-[10px] text-slate-400">This will open an email to katerina.pospichalovapavlov@prf.cuni.cz (CC: anna.mala@prf.cuni.cz and eva.mysakova@prf.cuni.cz). You can also email them directly.</p>
                   
                   <div className="p-4 rounded-lg flex gap-3 items-start border border-amber-200" style={{ backgroundColor: colors.warningBg }}>
                     <AlertTriangle className="w-5 h-5 shrink-0" style={{ color: colors.warningText }} />
