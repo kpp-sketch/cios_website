@@ -424,7 +424,7 @@ export default function App() {
               {[
                 { 
                     id: 'travel', 
-                    label: <>I plan to travel or<br/>I've been invited abroad</>, 
+                    label: <>I plan to travel or<br/>I have been invited abroad</>, 
                     icon: <div className="relative"><Plane className="w-10 h-10"/><Map className="w-5 h-5 absolute -bottom-1 -right-1 text-red-500"/></div> 
                 },
                 { 
@@ -439,12 +439,12 @@ export default function App() {
                 },
                 { 
                     id: 'grants', 
-                    label: <>I want to apply<br/>for a grant</>, 
+                    label: <>I want to apply for a grant</>, 
                     icon: <Coins className="w-10 h-10" /> 
                 },
                 { 
                     id: 'collaboration', 
-                    label: <>My collaboration with academics<br/>from a different institution</>, 
+                    label: <>I am collaborating with academics<br/>from a different institution</>, 
                     icon: <Handshake className="w-10 h-10" /> 
                 },
                 { 
