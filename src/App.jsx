@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { 
   Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe, Lock, 
-  Palmtree, BookOpen, ShoppingCart, PhoneCall, ArrowLeft, Banknote, Plane
+  Palmtree, BookOpen, ShoppingCart, PhoneCall, ArrowLeft, Banknote, Plane,
+  Handshake, Coins, Map, CreditCard, Send
 } from 'lucide-react';
 
 export default function App() {
@@ -392,12 +393,14 @@ export default function App() {
         // Podstránky Intranetu
         if (activeResource) {
           const resources = {
-            travel: { title: 'Travel Information', content: 'Details about travel arrangements and conferences will be added here.' },
-            openaccess: { title: 'Open Access Guide', content: 'Guidelines for open access publishing and repository submissions.' },
-            orders: { title: 'Orders & Procurement', content: 'Information regarding equipment orders and administrative procedures.' },
-            contact: { title: 'Contact Us', content: 'Internal contact directory and support channels.' }
+            travel: { title: 'Travel & Invitations', content: 'Guidelines on how to proceed when planning a trip or accepting an international invitation.' },
+            openaccess: { title: 'Publication & Peer-Review', content: 'Steps to take before and after sending your paper for peer-review, including Open Access funding.' },
+            orders: { title: 'Purchases & Payments', content: 'How to request a purchase or get reimbursement for project-related expenses.' },
+            grants: { title: 'Grant Applications', content: 'Support and workflow for submitting new research grant proposals.' },
+            collaboration: { title: 'External Collaborations', content: 'Administrative framework for working with academics from other institutions.' },
+            mobility: { title: 'Mobility Programs', content: 'Information about long-term study or work stays abroad.' }
           };
-          const res = resources[activeResource];
+          const res = resources[activeResource] || { title: 'Resource', content: 'Content coming soon.' };
           return (
             <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
               <button onClick={() => setActiveResource(null)} className="flex items-center text-xs font-black uppercase tracking-widest mb-8 hover:underline" style={{ color: colors.red }}>
@@ -406,6 +409,9 @@ export default function App() {
               <h2 className="text-3xl font-bold mb-6" style={{ color: colors.navy }}>{res.title}</h2>
               <div className="p-8 bg-slate-50 rounded-xl border border-slate-100">
                 <p style={{ color: colors.midBlueText }}>{res.content}</p>
+                <div className="mt-8 p-4 bg-white border border-dashed border-slate-300 rounded text-sm italic text-slate-400">
+                  Detailed instructions and forms will be placed here.
+                </div>
               </div>
             </div>
           );
@@ -413,26 +419,52 @@ export default function App() {
 
         // Hlavní rozcestník Intranetu
         return (
-          <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
+          <div className="py-12 px-6 sm:px-12 max-w-6xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Project Intranet</h2>
-            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>Resources for scientists</p>
+            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>How can we help you today?</p>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { id: 'travel', label: 'Travel', icon: <div className="relative"><Palmtree className="w-10 h-10"/><Plane className="w-5 h-5 absolute -top-1 -right-1 text-red-500 rotate-12"/></div> },
-                { id: 'openaccess', label: 'Open Access Guide', icon: <BookOpen className="w-10 h-10" /> },
-                { id: 'orders', label: 'Orders', icon: <div className="relative"><ShoppingCart className="w-10 h-10"/><Banknote className="w-5 h-5 absolute -bottom-1 -right-1 text-green-600"/></div> },
-                { id: 'contact', label: 'Contact us', icon: <div className="flex gap-1"><PhoneCall className="w-8 h-8"/><Mail className="w-8 h-8 opacity-40"/></div> }
+                { 
+                    id: 'travel', 
+                    label: "I plan to travel / I've been invited abroad", 
+                    icon: <div className="relative"><Plane className="w-10 h-10"/><Map className="w-5 h-5 absolute -bottom-1 -right-1 text-red-500"/></div> 
+                },
+                { 
+                    id: 'orders', 
+                    label: 'I need to pay for something / I plan to buy something', 
+                    icon: <div className="relative"><ShoppingCart className="w-10 h-10"/><CreditCard className="w-5 h-5 absolute -bottom-1 -right-1 text-green-600"/></div> 
+                },
+                { 
+                    id: 'openaccess', 
+                    label: 'I plan to send my paper for peer-review', 
+                    icon: <div className="relative"><BookOpen className="w-10 h-10"/><Send className="w-5 h-5 absolute -top-1 -right-1 text-blue-500"/></div> 
+                },
+                { 
+                    id: 'grants', 
+                    label: 'I want to apply for a grant', 
+                    icon: <Coins className="w-10 h-10" /> 
+                },
+                { 
+                    id: 'collaboration', 
+                    label: 'My collaboration with academics from a different institution', 
+                    icon: <Handshake className="w-10 h-10" /> 
+                },
+                { 
+                    id: 'mobility', 
+                    label: 'I would want to go on a longer study/work trip', 
+                    icon: <Globe className="w-10 h-10" /> 
+                }
               ].map((item) => (
                 <button 
                   key={item.id}
                   onClick={() => setActiveResource(item.id)}
-                  className="flex flex-col items-center justify-center p-10 bg-white border border-slate-200 rounded-2xl transition-all hover:shadow-lg hover:border-red-200 group"
+                  className="flex flex-col items-center justify-center p-8 bg-white border border-slate-200 rounded-2xl transition-all hover:shadow-lg hover:border-red-200 group h-64"
                 >
                   <div className="mb-6 text-slate-300 group-hover:text-red-500 transition-colors">
                     {item.icon}
                   </div>
-                  <span className="text-xs font-black uppercase tracking-widest text-center" style={{ color: colors.navy }}>{item.label}</span>
+                  <span className="text-sm font-bold text-center leading-relaxed px-4" style={{ color: colors.navy }}>{item.label}</span>
                 </button>
               ))}
             </div>
