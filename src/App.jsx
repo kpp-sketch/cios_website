@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { 
   Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe, Lock, 
   Palmtree, BookOpen, ShoppingCart, PhoneCall, ArrowLeft, Banknote, Plane,
-  Handshake, Coins, Map, CreditCard, Send
+  Handshake, Coins, Map, CreditCard, Send, AlertTriangle, CheckCircle, Clock, Upload, FileCheck
 } from 'lucide-react';
 
 export default function App() {
@@ -17,14 +17,49 @@ export default function App() {
   const [authError, setAuthError] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
 
+  // Stavy pro formuláře a soubory
+  const [formData, setFormData] = useState({ travel: '', orders: '' });
+  const [selectedFiles, setSelectedFiles] = useState({ travel: null, orders: null });
+  const [uploadStatus, setUploadStatus] = useState({ travel: false, orders: false });
+
   const colors = {
     navy: '#0A192F', 
     red: '#D12E41',
     midBlueText: '#4A6582',
-    borderGray: '#E5E7EB'
+    borderGray: '#E5E7EB',
+    warningBg: '#FFFBEB',
+    warningText: '#92400E'
   };
 
   const INTRANET_PASSWORD = "heslo123";
+
+  const handleInputChange = (resource, value) => {
+    setFormData(prev => ({ ...prev, [resource]: value }));
+  };
+
+  const handleFileChange = (resource, e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFiles(prev => ({ ...prev, [resource]: e.target.files[0] }));
+      setUploadStatus(prev => ({ ...prev, [resource]: false }));
+    }
+  };
+
+  const simulateUpload = (resource) => {
+    if (!selectedFiles[resource]) return;
+    // Simulace nahrávání
+    setUploadStatus(prev => ({ ...prev, [resource]: true }));
+    setTimeout(() => {
+        alert(`File "${selectedFiles[resource].name}" was successfully attached to the ${resource} record.`);
+    }, 500);
+  };
+
+  const sendEmail = (resource) => {
+    const to = "katerina.pospichalovapavlov@prf.cuni.cz";
+    const cc = "anna.mala@prf.cuni.cz";
+    const subject = resource === 'travel' ? "Travel Notification" : "Order Notification";
+    const body = formData[resource];
+    window.location.href = `mailto:${to}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
 
   const navStructure = [
     { id: 'home', label: 'Home' },
@@ -389,11 +424,134 @@ export default function App() {
           );
         }
 
+        if (activeResource === 'travel' || activeResource === 'orders') {
+          const isTravel = activeResource === 'travel';
+          const typeLabel = isTravel ? 'travel' : 'order';
+          const orderTerm = isTravel ? 'Travel Order' : 'Order';
+
+          const steps = [
+            {
+              title: `Step 1: Let us know about your ${typeLabel}`,
+              content: (
+                <div className="space-y-4">
+                  <p className="text-sm">Please write where you plan to go, for what purpose, and when.</p>
+                  <textarea 
+                    className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-red-100 outline-none text-sm min-h-[120px]"
+                    placeholder={isTravel ? "Example: I plan to go to Amsterdam for the EALE conference from Oct 10 to Oct 14." : "Example: I need to buy a new laptop for data analysis in WP3."}
+                    value={formData[activeResource]}
+                    onChange={(e) => handleInputChange(activeResource, e.target.value)}
+                  />
+                  <button 
+                    onClick={() => sendEmail(activeResource)}
+                    className="flex items-center gap-2 px-6 py-3 text-white text-[11px] font-black uppercase tracking-widest rounded-lg hover:opacity-90 transition-opacity"
+                    style={{ backgroundColor: colors.navy }}
+                  >
+                    <Send className="w-4 h-4" /> Send Notification
+                  </button>
+                  <p className="text-[10px] text-slate-400">This will open an email to katerina.pospichalovapavlov@prf.cuni.cz (CC: anna.mala@prf.cuni.cz). You can also email them directly.</p>
+                  
+                  <div className="p-4 rounded-lg flex gap-3 items-start border border-amber-200" style={{ backgroundColor: colors.warningBg }}>
+                    <AlertTriangle className="w-5 h-5 shrink-0" style={{ color: colors.warningText }} />
+                    <p className="text-sm font-bold" style={{ color: colors.warningText }}>
+                      IMPORTANT: Please do not buy any tickets or accommodation until your {orderTerm} is approved in Step 3.
+                    </p>
+                  </div>
+                </div>
+              ),
+              icon: <Mail className="w-5 h-5" />
+            },
+            {
+              title: `Step 2: Coordinate with us to fill out a ${orderTerm}`,
+              content: <p className="text-sm text-slate-500 italic">The {orderTerm} (cestovní příkaz) is not in English yet, but don't worry – we will help you fill it out together.</p>,
+              icon: <Users className="w-5 h-5" />
+            },
+            {
+              title: `Step 3: The ${orderTerm} is approved`,
+              content: <p className="text-sm text-slate-500">Wait for the confirmation from our administrative team.</p>,
+              icon: <CheckCircle className="w-5 h-5" />
+            },
+            {
+              title: `Step 4: Book your travel / Proceed with purchase`,
+              content: <p className="text-sm text-slate-500 font-bold">Now that the {orderTerm} is approved, you can officially buy your tickets, accommodation, or items.</p>,
+              icon: <ShoppingCart className="w-5 h-5" />
+            },
+            {
+              title: `Step 5: Send us the bills and invoice`,
+              content: (
+                <div className="space-y-4">
+                  <p className="text-sm text-slate-500">Please send us the invoices and receipts immediately after the purchase.</p>
+                  <div className="p-6 border-2 border-dashed border-slate-200 rounded-xl bg-white flex flex-col items-center">
+                    <input 
+                      type="file" 
+                      id="file-upload" 
+                      className="hidden" 
+                      onChange={(e) => handleFileChange(activeResource, e)}
+                    />
+                    <label 
+                      htmlFor="file-upload" 
+                      className="cursor-pointer flex flex-col items-center"
+                    >
+                      {uploadStatus[activeResource] ? (
+                        <FileCheck className="w-10 h-10 text-green-500 mb-2" />
+                      ) : (
+                        <Upload className="w-10 h-10 text-slate-300 mb-2" />
+                      )}
+                      <span className="text-xs font-bold uppercase tracking-wider" style={{ color: colors.navy }}>
+                        {selectedFiles[activeResource] ? selectedFiles[activeResource].name : "Select File to Upload"}
+                      </span>
+                    </label>
+                    {selectedFiles[activeResource] && !uploadStatus[activeResource] && (
+                      <button 
+                        onClick={() => simulateUpload(activeResource)}
+                        className="mt-4 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white rounded bg-red-500 hover:bg-red-600 transition-colors"
+                      >
+                        Upload and attach
+                      </button>
+                    )}
+                    {uploadStatus[activeResource] && (
+                        <p className="mt-2 text-[10px] font-bold text-green-600 uppercase tracking-widest">Document Attached Successfully</p>
+                    )}
+                  </div>
+                </div>
+              ),
+              icon: <FileDown className="w-5 h-5" />
+            },
+            {
+              title: `Step 6: After return...`,
+              content: <p className="text-sm text-slate-400 italic">Instructions for post-travel/order settlement will be added here.</p>,
+              icon: <Clock className="w-5 h-5" />
+            }
+          ];
+
+          return (
+            <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
+              <button onClick={() => setActiveResource(null)} className="flex items-center text-xs font-black uppercase tracking-widest mb-8 hover:underline" style={{ color: colors.red }}>
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Resources
+              </button>
+              
+              <h2 className="text-3xl font-bold mb-2" style={{ color: colors.navy }}>{isTravel ? 'Travel Arrangements' : 'Procurement & Orders'}</h2>
+              <p className="text-sm mb-12 opacity-60">Follow this step-by-step guide to ensure smooth administrative processing.</p>
+
+              <div className="space-y-12 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100">
+                {steps.map((step, idx) => (
+                  <div key={idx} className="relative pl-12">
+                    <div className="absolute left-0 top-0 w-10 h-10 rounded-full bg-white border-2 border-slate-100 flex items-center justify-center z-10 text-slate-300">
+                      {step.icon}
+                    </div>
+                    <h3 className="text-lg font-bold mb-4" style={{ color: colors.navy }}>{step.title}</h3>
+                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                      {step.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
         if (activeResource) {
           const resources = {
-            travel: { title: 'Travel & Invitations', content: 'Guidelines on how to proceed when planning a trip or accepting an international invitation.' },
             openaccess: { title: 'Publication & Peer-Review', content: 'Steps to take before and after sending your paper for peer-review, including Open Access funding.' },
-            orders: { title: 'Purchases & Payments', content: 'How to request a purchase or get reimbursement for project-related expenses.' },
             grants: { title: 'Grant Applications', content: 'Support and workflow for submitting new research grant proposals.' },
             collaboration: { title: 'External Collaborations', content: 'Administrative framework for working with academics from other institutions.' },
             mobility: { title: 'Mobility Programs', content: 'Information about long-term study or work stays abroad.' }
@@ -405,11 +563,8 @@ export default function App() {
                 <ArrowLeft className="w-4 h-4 mr-2" /> Back to Resources
               </button>
               <h2 className="text-3xl font-bold mb-6" style={{ color: colors.navy }}>{res.title}</h2>
-              <div className="p-8 bg-slate-50 rounded-xl border border-slate-100">
-                <p style={{ color: colors.midBlueText }}>{res.content}</p>
-                <div className="mt-8 p-4 bg-white border border-dashed border-slate-300 rounded text-sm italic text-slate-400">
-                  Detailed instructions and forms will be placed here.
-                </div>
+              <div className="p-8 bg-slate-50 rounded-xl border border-slate-100 italic text-slate-400">
+                {res.content}
               </div>
             </div>
           );
@@ -418,13 +573,13 @@ export default function App() {
         return (
           <div className="py-12 px-6 sm:px-12 max-w-6xl mx-auto text-left">
             <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Project Intranet</h2>
-            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>How can we help you today?</p>
+            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>Resources for CIOS Staff</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 { 
                     id: 'travel', 
-                    label: <>I plan to travel or<br/>I have been invited abroad</>, 
+                    label: <>I plan to travel or<br/>I've been invited abroad</>, 
                     icon: <div className="relative"><Plane className="w-10 h-10"/><Map className="w-5 h-5 absolute -bottom-1 -right-1 text-red-500"/></div> 
                 },
                 { 
@@ -439,17 +594,17 @@ export default function App() {
                 },
                 { 
                     id: 'grants', 
-                    label: <>I want to apply for a grant</>, 
+                    label: <>I want to apply<br/>for a grant</>, 
                     icon: <Coins className="w-10 h-10" /> 
                 },
                 { 
                     id: 'collaboration', 
-                    label: <>I am collaborating with academics<br/>from a different institution</>, 
+                    label: <>My collaboration with academics<br/>from a different institution</>, 
                     icon: <Handshake className="w-10 h-10" /> 
                 },
                 { 
                     id: 'mobility', 
-                    label: <>I would want to study or work abroad</>, 
+                    label: <>I would want to go on a<br/>longer study/work trip</>, 
                     icon: <Globe className="w-10 h-10" /> 
                 }
               ].map((item) => (
