@@ -449,7 +449,7 @@ export default function App() {
                 },
                 { 
                     id: 'mobility', 
-                    label: <>I would want to go on a<br/>longer study/work trip</>, 
+                    label: <>I would want to study or work abroad</>, 
                     icon: <Globe className="w-10 h-10" /> 
                 }
               ].map((item) => (
