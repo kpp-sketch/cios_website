@@ -462,7 +462,7 @@ export default function App() {
             },
             {
               title: `Step 2: Coordinate with us to fill out a ${orderTerm}`,
-              content: <p className="text-sm text-slate-500 italic">The {orderTerm} (cestovní příkaz) is not in English yet, but don't worry – we will help you fill it out together.</p>,
+              content: <p className="text-sm text-slate-500 italic">The {orderTerm} (cestovní příkaz) is not in English yet, but don't worry – we will help you fill it out together. If you want to try to fill it out yourself, you can find it under this link (https://cunicz.sharepoint.com/sites/PF-Int/SitePages/Zahrani%C4%8Dn%C3%AD-cesta---formul%C3%A1%C5%99.aspx) , at the bottom of the page as „2026 Zahraniční cesta“. After you fill it our, please send it to us.  </p>,
               icon: <Users className="w-5 h-5" />
             },
             {
@@ -579,7 +579,7 @@ export default function App() {
               {[
                 { 
                     id: 'travel', 
-                    label: <>I plan to travel or<br/>I've been invited abroad</>, 
+                    label: <>I plan to travel or<br/>I have been invited abroad</>, 
                     icon: <div className="relative"><Plane className="w-10 h-10"/><Map className="w-5 h-5 absolute -bottom-1 -right-1 text-red-500"/></div> 
                 },
                 { 
@@ -599,12 +599,12 @@ export default function App() {
                 },
                 { 
                     id: 'collaboration', 
-                    label: <>My collaboration with academics<br/>from a different institution</>, 
+                    label: <>I am collaborating with academics<br/>from a another institution</>, 
                     icon: <Handshake className="w-10 h-10" /> 
                 },
                 { 
                     id: 'mobility', 
-                    label: <>I would want to go on a<br/>longer study/work trip</>, 
+                    label: <>I would want to go on a<br/>study/work trip to another institution</>, 
                     icon: <Globe className="w-10 h-10" /> 
                 }
               ].map((item) => (
