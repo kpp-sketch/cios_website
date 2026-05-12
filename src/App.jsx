@@ -32,13 +32,35 @@ export default function App() {
 
   const INTRANET_PASSWORD = "heslo123";
 
-  // Data pro aktuality
+  // Funkce pro navigaci na konkrétního člena týmu
+  const goToMember = (name) => {
+    setActiveTab('people');
+    setTimeout(() => {
+      const element = document.getElementById(name);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.style.transition = 'background-color 0.5s';
+        element.style.backgroundColor = '#fef2f2';
+        setTimeout(() => element.style.backgroundColor = 'transparent', 2000);
+      }
+    }, 150);
+  };
+
+  // Data pro aktuality s vloženými odkazy
   const newsData = [
     {
       date: "May 2026",
-      person: "Michal Šoltés",
-      title: "Presentation at London School of Economics and Political Science",
-      desc: "Michal Šoltés has presented at the London School of Economics and Political Science. His presentation on the Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students has been a part of the European Seminars on the Economics of Crime series.",
+      title: "Michal Šoltés at the London School of Economics",
+      desc: (
+        <>
+          <button onClick={() => goToMember("Michal Šoltés")} className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">Michal Šoltés</button>
+          {" has presented at the "}
+          <a href="https://www.lse.ac.uk/" target="_blank" rel="noreferrer" className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">London School of Economics and Political Science</a>
+          {". His presentation on the Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students has been a part of the "}
+          <a href="https://cep.lse.ac.uk/_new/events/economics-of-crime/" target="_blank" rel="noreferrer" className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">European Seminars on the Economics of Crime</a>
+          {" series."}
+        </>
+      ),
       source: "https://cep.lse.ac.uk/_new/events/event.asp?index=10552",
       pdf: null
     }
@@ -124,7 +146,6 @@ export default function App() {
   }, []);
 
   const handleNavClick = (tabId, sectionId = null) => {
-    // Pokud je cílové ID 'intranet', přepneme aktivní tab na 'intranet'
     if (sectionId === 'intranet') {
       setActiveTab('intranet');
       setActiveResource(null);
@@ -145,19 +166,6 @@ export default function App() {
         }, 100);
       }
     }
-  };
-
-  const goToMember = (name) => {
-    setActiveTab('people');
-    setTimeout(() => {
-      const element = document.getElementById(name);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        element.style.transition = 'background-color 0.5s';
-        element.style.backgroundColor = '#fef2f2';
-        setTimeout(() => element.style.backgroundColor = 'transparent', 2000);
-      }
-    }, 150);
   };
 
   const handleAuth = (e) => {
@@ -187,7 +195,6 @@ export default function App() {
   };
 
   const PublicationItem = ({ pub }) => {
-    const [isOpen, setIsOpen] = useState(false);
     return (
       <div className="mb-8 last:mb-0 text-left p-2 rounded-lg transition-colors">
         <div className="flex items-center gap-3 mb-1">
@@ -241,7 +248,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Dolní část: News & Events (pod publikacemi) */}
+              {/* Dolní část: News & Events */}
               <div className="text-left pt-16 border-t" style={{ borderColor: colors.borderGray }}>
                 <h2 className="text-2xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>News & Events</h2>
                 <div className="space-y-16">
@@ -250,17 +257,12 @@ export default function App() {
                       <span className="text-[10px] font-black uppercase tracking-widest opacity-40 block mb-3">{news.date}</span>
                       <h4 className="text-2xl font-bold mb-4" style={{ color: colors.navy }}>{news.title}</h4>
                       <p className="text-lg leading-relaxed mb-6" style={{ color: colors.midBlueText }}>
-                        <button 
-                          onClick={() => goToMember(news.person)}
-                          className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors"
-                        >
-                          {news.person}
-                        </button> {news.desc.split(news.person)[1]}
+                        {news.desc}
                       </p>
                       <div className="flex gap-8">
                         {news.source && (
                           <a href={news.source} target="_blank" rel="noreferrer" className="text-[11px] font-black uppercase tracking-widest flex items-center hover:underline" style={{ color: colors.red }}>
-                            <ExternalLink className="w-4 h-4 mr-2" /> Source
+                            <ExternalLink className="w-4 h-4 mr-2" /> Full Event Details
                           </a>
                         )}
                       </div>
@@ -363,20 +365,6 @@ export default function App() {
                 <div key={wp.id} className="border-l-4 pl-6 py-2" style={{ borderColor: colors.red }}>
                   <h4 className="text-xl font-bold"><span style={{ color: colors.red }}>{wp.id}</span> {wp.title}</h4>
                   <p className="text-sm font-bold my-1">Leader: <span className="font-normal" style={{ color: colors.midBlueText }}>{wp.leader}</span></p>
-                </div>
-              ))}
-            </div>
-            
-            <h2 id="management" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management</h2>
-            <div className="grid sm:grid-cols-2 gap-8 mb-20">
-              {[
-                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-                { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' }
-              ].map((m, i) => (
-                <div key={i} className="text-left">
-                  <p className="font-bold text-lg mb-0">{m.name}</p>
-                  <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{m.role}</p>
-                  <a href={`mailto:${m.email}`} className="text-sm hover:underline">{m.email}</a>
                 </div>
               ))}
             </div>
