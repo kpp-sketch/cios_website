@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { 
   Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe, Lock, 
   Palmtree, BookOpen, ShoppingCart, PhoneCall, ArrowLeft, Banknote, Plane,
-  Handshake, Coins, Map, CreditCard, Send, AlertTriangle, CheckCircle, Clock, Upload, FileCheck
+  Handshake, Coins, Map, CreditCard, Send, AlertTriangle, CheckCircle, Clock, Upload, FileCheck, FileText
 } from 'lucide-react';
 
 export default function App() {
@@ -17,7 +17,6 @@ export default function App() {
   const [authError, setAuthError] = useState(false);
   const [activeResource, setActiveResource] = useState(null);
 
-  // Stavy pro formuláře a soubory
   const [formData, setFormData] = useState({ travel: '', orders: '' });
   const [selectedFiles, setSelectedFiles] = useState({ travel: null, orders: null });
   const [uploadStatus, setUploadStatus] = useState({ travel: false, orders: false });
@@ -33,6 +32,22 @@ export default function App() {
 
   const INTRANET_PASSWORD = "heslo123";
 
+  // Data pro aktuality a prezentace
+  const newsData = [
+    {
+      date: "May 10, 2026",
+      title: "CIOS at EALE Amsterdam",
+      desc: "Our team presented research on judicial inequality. You can download the presentation slides below.",
+      pdf: "/presentations/eale_2026_presentation.pdf" // Cesta k souboru v public/presentations/
+    },
+    {
+      date: "April 15, 2026",
+      title: "Workshop: Empirical Legal Methods",
+      desc: "A successful internal workshop focusing on machine learning in legal research.",
+      pdf: null
+    }
+  ];
+
   const handleInputChange = (resource, value) => {
     setFormData(prev => ({ ...prev, [resource]: value }));
   };
@@ -46,7 +61,6 @@ export default function App() {
 
   const simulateUpload = (resource) => {
     if (!selectedFiles[resource]) return;
-    // Simulace nahrávání
     setUploadStatus(prev => ({ ...prev, [resource]: true }));
     setTimeout(() => {
         alert(`File "${selectedFiles[resource].name}" was successfully attached to the ${resource} record.`);
@@ -80,10 +94,10 @@ export default function App() {
         { label: 'Overview', id: 'the-project' },
         { label: 'Work Packages', id: 'work-packages' },
         { label: 'Management', id: 'management' },
-        { label: 'Advisory Board', id: 'isab-board' }
+        { label: 'Advisory Board', id: 'isab-board' },
+        { label: 'Resources for Researchers', id: 'intranet' } // Přesunuto zde
       ]
-    },
-    { id: 'intranet', label: 'Intranet' }
+    }
   ];
 
   const isabMembers = [
@@ -239,19 +253,42 @@ export default function App() {
               <h1 className="text-4xl sm:text-6xl font-black mb-6" style={{ color: colors.navy }}>Center for Inequality and <br className="hidden sm:block" /> Open Society</h1>
               <p className="text-xl max-w-3xl mx-auto" style={{ color: colors.midBlueText }}>An interdisciplinary initiative applying empirical research to address challenges in modern open societies.</p>
             </div>
-            <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-16 border-t pt-16" style={{ borderColor: colors.borderGray }}>
-              <div className="md:col-span-2 text-left">
+
+            <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 border-t pt-16" style={{ borderColor: colors.borderGray }}>
+              {/* Sekce NEWS & EVENTS */}
+              <div className="text-left">
+                <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>News & Events</h2>
+                <div className="space-y-8">
+                  {newsData.map((news, idx) => (
+                    <div key={idx} className="border-l-2 pl-4 py-1" style={{ borderColor: colors.borderGray }}>
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-50">{news.date}</span>
+                      <h4 className="font-bold text-lg mt-1 mb-2" style={{ color: colors.navy }}>{news.title}</h4>
+                      <p className="text-sm mb-3" style={{ color: colors.midBlueText }}>{news.desc}</p>
+                      {news.pdf && (
+                        <a href={news.pdf} target="_blank" rel="noreferrer" className="text-[10px] font-black uppercase tracking-widest flex items-center hover:underline" style={{ color: colors.red }}>
+                          <FileText className="w-3 h-3 mr-1" /> View Presentation
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sekce LATEST UPDATES (Publikace) */}
+              <div className="text-left">
                 <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Updates</h2>
                 <div className="space-y-8">
                   {recentUpdates.map((pub, idx) => (
                     <div key={idx} className="cursor-pointer group" onClick={() => scrollToPublication(pub.title)}>
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{pub.type}</span>
-                      <h3 className="text-xl font-bold mt-1 mb-2 leading-snug group-hover:underline decoration-slate-300" style={{ color: colors.navy }}>{pub.title}</h3>
-                      <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+                      <h3 className="text-lg font-bold mt-1 mb-1 leading-snug group-hover:underline decoration-slate-300" style={{ color: colors.navy }}>{pub.title}</h3>
+                      <p className="text-xs font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
                     </div>
                   ))}
                 </div>
               </div>
+
+              {/* Sekce SEMINARS */}
               <div className="p-8 bg-slate-50 rounded-xl border h-fit text-left" style={{ borderColor: colors.borderGray }}>
                 <h3 className="text-xl font-bold mb-4">Research Seminars</h3>
                 <p className="text-sm mb-6">Join our regular sessions on empirical legal studies and economics.</p>
@@ -572,8 +609,8 @@ export default function App() {
 
         return (
           <div className="py-12 px-6 sm:px-12 max-w-6xl mx-auto text-left">
-            <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Project Intranet</h2>
-            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>Resources for CIOS Staff</p>
+            <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Resources for Researchers</h2>
+            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>Administrative Support & Workflows</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
