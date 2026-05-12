@@ -37,8 +37,8 @@ export default function App() {
     {
       date: "May 2026",
       person: "Michal Šoltés",
-      title: "Presentation at LSE",
-      desc: "Michal Šoltés has presented at the London School of Economics and Political Science. His presentation on 'The Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students' has been a part of the European Seminars on the Economics of Crime series.",
+      title: "Presentation at London School of Economics and Political Science",
+      desc: "Michal Šoltés has presented at the London School of Economics and Political Science. His presentation on the Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students has been a part of the European Seminars on the Economics of Crime series.",
       source: "https://cep.lse.ac.uk/_new/events/event.asp?index=10552",
       pdf: null
     }
@@ -96,44 +96,6 @@ export default function App() {
     }
   ];
 
-  const isabMembers = [
-    {
-      name: "Anna Louisa Bindler",
-      roles: [{ title: "Professor", inst: "University of Potsdam" }],
-      link: "https://sites.google.com/site/annabindler/",
-      email: "abindler@diw.de",
-      bio: "Expertise in empirical legal studies."
-    },
-    {
-      name: "Susann Fiedler",
-      roles: [{ title: "Professor", inst: "Vienna University of Economics" }],
-      link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
-      email: "susann.fiedler@wu.ac.at",
-      bio: "Researcher in behavioral economics."
-    },
-    {
-      name: "Barbara Havelková",
-      roles: [{ title: "Associate Professor", inst: "University of Oxford" }],
-      link: "https://www.law.ox.ac.uk/people/barbara-havelkova",
-      email: "barbara.havelkova@law.ox.ac.uk",
-      bio: "Specialist in gender legal studies."
-    },
-    {
-      name: "Elena Kantorowicz-Reznichenko",
-      roles: [{ title: "Professor", inst: "Erasmus University" }],
-      link: "https://kantorowicz-reznichenko.weebly.com/",
-      email: "kantorowicz@law.eur.nl",
-      bio: "Expert in economic analysis of law."
-    },
-    {
-      name: "Keren Weinshall",
-      roles: [{ title: "Professor", inst: "Hebrew University" }],
-      link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
-      email: "keren.weinshall@mail.huji.ac.il",
-      bio: "Researcher focusing on judicial decision-making."
-    }
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -162,27 +124,26 @@ export default function App() {
   }, []);
 
   const handleNavClick = (tabId, sectionId = null) => {
-    // Speciální případ: pokud kliknu na Resources v menu, přepni tab na intranet
+    // Pokud je cílové ID 'intranet', přepneme aktivní tab na 'intranet'
     if (sectionId === 'intranet') {
       setActiveTab('intranet');
       setActiveResource(null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-
-    setActiveTab(tabId);
-    if (tabId !== 'intranet') setActiveResource(null);
-    if (!sectionId) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const offset = 140; 
-          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-          window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
-        }
-      }, 100);
+      setActiveTab(tabId);
+      if (tabId !== 'intranet') setActiveResource(null);
+      if (!sectionId) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            const offset = 140; 
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+          }
+        }, 100);
+      }
     }
   };
 
@@ -192,10 +153,11 @@ export default function App() {
       const element = document.getElementById(name);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.style.transition = 'background-color 0.5s';
         element.style.backgroundColor = '#fef2f2';
         setTimeout(() => element.style.backgroundColor = 'transparent', 2000);
       }
-    }, 100);
+    }, 150);
   };
 
   const handleAuth = (e) => {
@@ -236,14 +198,6 @@ export default function App() {
         </div>
         <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
         <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
-        {pub.abstract && (
-          <div className="mb-4 text-left">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-xs font-black uppercase tracking-widest flex items-center" style={{ color: colors.red }}>
-              Abstract {isOpen ? <ChevronDown className="w-3 h-3 ml-1 rotate-180" /> : <ChevronDown className="w-3 h-3 ml-1" />}
-            </button>
-            {isOpen && <p className="mt-3 p-4 bg-slate-50 rounded text-sm italic" style={{ color: colors.midBlueText }}>{pub.abstract}</p>}
-          </div>
-        )}
         <div className="flex gap-6 text-sm font-bold">
           {pub.pdf && pub.pdf !== '#' && <a href={pub.pdf} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><FileDown className="w-4 h-4 mr-2" /> PDF</a>}
           {(pub.link || pub.repo) && <a href={pub.link || pub.repo} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><Library className="w-4 h-4 mr-2" /> {pub.type === 'working-paper' ? 'Repository' : 'Journal Link'}</a>}
@@ -264,8 +218,8 @@ export default function App() {
             </div>
 
             <div className="max-w-6xl mx-auto border-t pt-16" style={{ borderColor: colors.borderGray }}>
-              <div className="grid md:grid-cols-3 gap-16 mb-16">
-                {/* Horní část: Publikace a Semináře */}
+              <div className="grid md:grid-cols-3 gap-16 mb-20">
+                {/* Horní část: Latest Publications */}
                 <div className="md:col-span-2 text-left">
                   <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Latest Publications</h2>
                   <div className="grid sm:grid-cols-2 gap-8">
@@ -279,6 +233,7 @@ export default function App() {
                   </div>
                 </div>
                 
+                {/* Sidebar: Semináře */}
                 <div className="p-8 bg-slate-50 rounded-xl border h-fit text-left" style={{ borderColor: colors.borderGray }}>
                   <h3 className="text-xl font-bold mb-4">Research Seminars</h3>
                   <p className="text-sm mb-6">Join our regular sessions on empirical legal studies and economics.</p>
@@ -286,15 +241,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Dolní část: News and Events pod publikacemi */}
-              <div className="text-left pt-12 border-t" style={{ borderColor: colors.borderGray }}>
-                <h2 className="text-2xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>News & Events</h2>
-                <div className="space-y-12">
+              {/* Dolní část: News & Events (pod publikacemi) */}
+              <div className="text-left pt-16 border-t" style={{ borderColor: colors.borderGray }}>
+                <h2 className="text-2xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>News & Events</h2>
+                <div className="space-y-16">
                   {newsData.map((news, idx) => (
                     <div key={idx} className="max-w-4xl">
-                      <span className="text-[10px] font-black uppercase tracking-widest opacity-50 block mb-2">{news.date}</span>
-                      <h4 className="text-xl font-bold mb-3" style={{ color: colors.navy }}>{news.title}</h4>
-                      <p className="text-lg leading-relaxed mb-4" style={{ color: colors.midBlueText }}>
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-40 block mb-3">{news.date}</span>
+                      <h4 className="text-2xl font-bold mb-4" style={{ color: colors.navy }}>{news.title}</h4>
+                      <p className="text-lg leading-relaxed mb-6" style={{ color: colors.midBlueText }}>
                         <button 
                           onClick={() => goToMember(news.person)}
                           className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors"
@@ -302,15 +257,10 @@ export default function App() {
                           {news.person}
                         </button> {news.desc.split(news.person)[1]}
                       </p>
-                      <div className="flex gap-6">
+                      <div className="flex gap-8">
                         {news.source && (
                           <a href={news.source} target="_blank" rel="noreferrer" className="text-[11px] font-black uppercase tracking-widest flex items-center hover:underline" style={{ color: colors.red }}>
                             <ExternalLink className="w-4 h-4 mr-2" /> Source
-                          </a>
-                        )}
-                        {news.pdf && (
-                          <a href={news.pdf} target="_blank" rel="noreferrer" className="text-[11px] font-black uppercase tracking-widest flex items-center hover:underline" style={{ color: colors.navy }}>
-                            <FileText className="w-4 h-4 mr-2" /> View Presentation
                           </a>
                         )}
                       </div>
@@ -347,6 +297,41 @@ export default function App() {
             </div>
           </div>
         );
+      case 'intranet':
+        if (!isAuthenticated) {
+          return (
+            <div className="py-24 px-6 max-w-md mx-auto text-center">
+              <div className="bg-slate-50 p-10 rounded-2xl border border-slate-200">
+                <Lock className="w-12 h-12 mx-auto mb-6 opacity-20" />
+                <h2 className="text-2xl font-bold mb-2">Restricted Access</h2>
+                <p className="text-sm mb-8" style={{ color: colors.midBlueText }}>Please enter the password to access resources for researchers.</p>
+                <form onSubmit={handleAuth} className="space-y-4">
+                  <input type="password" placeholder="Password" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2" style={{ borderColor: authError ? colors.red : colors.borderGray }} />
+                  {authError && <p className="text-xs font-bold" style={{ color: colors.red }}>Incorrect password.</p>}
+                  <button type="submit" className="w-full py-3 rounded-lg font-black uppercase tracking-widest text-white transition-opacity hover:opacity-90" style={{ backgroundColor: colors.navy }}>Login</button>
+                </form>
+              </div>
+            </div>
+          );
+        }
+        return (
+          <div className="py-12 px-6 sm:px-12 max-w-6xl mx-auto text-left">
+            <h2 className="text-3xl font-bold mb-4" style={{ color: colors.navy }}>Resources for Researchers</h2>
+            <p className="text-lg mb-12 border-b-2 inline-block pb-2" style={{ color: colors.red, borderColor: colors.red }}>Internal Support & Administration</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { id: 'travel', label: 'Travel Arrangements', icon: <Plane className="w-10 h-10"/> },
+                { id: 'orders', label: 'Procurement & Orders', icon: <ShoppingCart className="w-10 h-10"/> },
+                { id: 'grants', label: 'Grant Applications', icon: <Coins className="w-10 h-10" /> }
+              ].map((item) => (
+                <button key={item.id} onClick={() => setActiveResource(item.id)} className="flex flex-col items-center justify-center p-8 bg-white border border-slate-200 rounded-2xl hover:shadow-lg transition-all min-h-[220px] group">
+                  <div className="mb-6 text-slate-300 group-hover:text-red-500 transition-colors">{item.icon}</div>
+                  <span className="text-sm font-bold text-center" style={{ color: colors.navy }}>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
       case 'publications':
         const wps = publicationsData.filter(p => p.type === 'working-paper');
         const articles = publicationsData.filter(p => p.type === 'journal-article');
@@ -363,7 +348,7 @@ export default function App() {
         return (
           <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto text-left">
             <h2 id="the-project" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
-            <p className="text-lg leading-relaxed mb-16">The Center for Inequality and Open Society (CIOS) is an interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.</p>
+            <p className="text-lg leading-relaxed mb-16">The Center for Inequality and Open Society (CIOS) is an interdisciplinary research initiative addressing the critical challenges and disparities faced by modern open societies in the digital age.</p>
             
             <h2 id="work-packages" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
             <div className="grid gap-10 mb-20">
@@ -395,61 +380,6 @@ export default function App() {
                 </div>
               ))}
             </div>
-
-            <h2 id="isab-board" className="text-3xl font-bold mb-12 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>ISAB Board</h2>
-            <div className="space-y-10">
-              {isabMembers.map((member, idx) => (
-                <div key={idx} className="pb-8 border-b border-slate-100 last:border-0">
-                  <h4 className="text-xl font-bold" style={{ color: colors.navy }}>{member.name}</h4>
-                  <p className="text-sm font-bold" style={{ color: colors.red }}>{member.roles[0].title} | <span style={{ color: colors.midBlueText }}>{member.roles[0].inst}</span></p>
-                  <p className="text-sm mt-2 opacity-70">{member.bio}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      case 'intranet':
-        if (!isAuthenticated) {
-          return (
-            <div className="py-24 px-6 max-w-md mx-auto text-center">
-              <div className="bg-slate-50 p-10 rounded-2xl border border-slate-200">
-                <Lock className="w-12 h-12 mx-auto mb-6 opacity-20" />
-                <h2 className="text-2xl font-bold mb-2">Restricted Access</h2>
-                <p className="text-sm mb-8" style={{ color: colors.midBlueText }}>Please enter the password to access resources for researchers.</p>
-                <form onSubmit={handleAuth} className="space-y-4">
-                  <input type="password" placeholder="Password" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2" style={{ borderColor: authError ? colors.red : colors.borderGray }} />
-                  {authError && <p className="text-xs font-bold" style={{ color: colors.red }}>Incorrect password.</p>}
-                  <button type="submit" className="w-full py-3 rounded-lg font-black uppercase tracking-widest text-white transition-opacity hover:opacity-90" style={{ backgroundColor: colors.navy }}>Login</button>
-                </form>
-              </div>
-            </div>
-          );
-        }
-
-        if (activeResource) {
-          return (
-            <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto text-left">
-              <button onClick={() => setActiveResource(null)} className="flex items-center text-xs font-black uppercase tracking-widest mb-8 hover:underline" style={{ color: colors.red }}><ArrowLeft className="w-4 h-4 mr-2" /> Back</button>
-              <h2 className="text-3xl font-bold mb-6">Module under development</h2>
-            </div>
-          );
-        }
-
-        return (
-          <div className="py-12 px-6 sm:px-12 max-w-6xl mx-auto text-left">
-            <h2 className="text-3xl font-bold mb-4">Resources for Researchers</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                { id: 'travel', label: 'Travel Arrangements', icon: <Plane className="w-10 h-10"/> },
-                { id: 'orders', label: 'Procurement & Orders', icon: <ShoppingCart className="w-10 h-10"/> },
-                { id: 'grants', label: 'Grant Applications', icon: <Coins className="w-10 h-10" /> }
-              ].map((item) => (
-                <button key={item.id} onClick={() => setActiveResource(item.id)} className="flex flex-col items-center justify-center p-8 bg-white border border-slate-200 rounded-2xl hover:shadow-lg transition-all min-h-[220px]">
-                  <div className="mb-6 text-slate-300 group-hover:text-red-500">{item.icon}</div>
-                  <span className="text-sm font-bold text-center" style={{ color: colors.navy }}>{item.label}</span>
-                </button>
-              ))}
-            </div>
           </div>
         );
       default: return null;
@@ -471,8 +401,16 @@ export default function App() {
           <div className="flex flex-col items-end gap-3 mt-2">
             <div className="flex gap-8">
               {navStructure.map(item => (
-                <button key={item.id} onClick={() => handleNavClick(item.id)} onMouseEnter={() => setHoverTab(item.id)} className="text-[11px] font-black uppercase tracking-widest pb-1 transition-colors"
-                  style={{ color: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? colors.navy : colors.midBlueText, borderBottom: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? `2px solid ${colors.red}` : '2px solid transparent' }}>
+                <button 
+                  key={item.id} 
+                  onClick={() => handleNavClick(item.id)} 
+                  onMouseEnter={() => setHoverTab(item.id)} 
+                  className="text-[11px] font-black uppercase tracking-widest pb-1 transition-colors"
+                  style={{ 
+                    color: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? colors.navy : colors.midBlueText, 
+                    borderBottom: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? `2px solid ${colors.red}` : '2px solid transparent' 
+                  }}
+                >
                   {item.label}
                 </button>
               ))}
@@ -480,7 +418,12 @@ export default function App() {
             
             <div className="flex gap-6 h-5">
               {displayNav && displayNav.sub && displayNav.sub.map(subItem => (
-                <button key={subItem.id} onClick={() => handleNavClick(displayNav.id, subItem.id)} className="text-[10px] font-black uppercase tracking-widest hover:text-navy" style={{ color: colors.midBlueText }}>
+                <button 
+                  key={subItem.id} 
+                  onClick={() => handleNavClick(displayNav.id, subItem.id)} 
+                  className="text-[10px] font-black uppercase tracking-widest hover:text-navy transition-colors" 
+                  style={{ color: colors.midBlueText }}
+                >
                   {subItem.label}
                 </button>
               ))}
@@ -492,8 +435,8 @@ export default function App() {
       <main className="flex-grow">{renderContent()}</main>
 
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
-        <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center text-[11px]">
-          <p className="mb-4">Co-funded by the European Regional Development Fund, project CIOS, no. CZ.02.01.01/00/23_025/0008690.</p>
+        <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center">
+          <p className="text-[11px] opacity-60">Co-funded by the European Regional Development Fund, project CIOS, no. CZ.02.01.01/00/23_025/0008690.</p>
         </div>
       </footer>
     </div>
