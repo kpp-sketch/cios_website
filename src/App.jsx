@@ -82,7 +82,7 @@ export default function App() {
       roles: [{ title: "Professor of Business Psychology", inst: "Vienna University of Economics" }],
       link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
       email: "susann.fiedler@wu.ac.at",
-      bio: "Prominent researcher in behavioral economics and psychology."
+      bio: "Researcher in behavioral economics and psychology."
     },
     {
       name: "Barbara Havelková",
