@@ -69,6 +69,7 @@ export default function App() {
   const isabMembers = [
     {
       name: "Anna Louisa Bindler",
+      photo: "anna_bindler.jpg",
       roles: [
         { title: "Professor for Applied Microeconomics", inst: "University of Potsdam" },
         { title: "Head of the Crime, Labor and Inequality Department", inst: "DIW Berlin" }
@@ -79,6 +80,7 @@ export default function App() {
     },
     {
       name: "Susann Fiedler",
+      photo: "Susann_Fiedler.jpg",
       roles: [{ title: "Professor of Business Psychology", inst: "Vienna University of Economics" }],
       link: "https://scholar.google.com/citations?user=r3RGGrsAAAAJ&hl=en",
       email: "susann.fiedler@wu.ac.at",
@@ -86,6 +88,7 @@ export default function App() {
     },
     {
       name: "Barbara Havelková",
+      photo: "barbara_havelkova.jpg",
       roles: [{ title: "Associate Professor of Law", inst: "University of Oxford" }],
       link: "https://www.law.ox.ac.uk/people/barbara-havelkova",
       email: "barbara.havelkova@law.ox.ac.uk",
@@ -93,6 +96,7 @@ export default function App() {
     },
     {
       name: "Elena Kantorowicz-Reznichenko",
+      photo: "kantorowicz_reznichenko.jpg",
       roles: [{ title: "Professor of Quantitative Empirical Legal Studies", inst: "Erasmus University" }],
       link: "https://kantorowicz-reznichenko.weebly.com/",
       email: "kantorowicz@law.eur.nl",
@@ -100,6 +104,7 @@ export default function App() {
     },
     {
       name: "Keren Weinshall",
+      photo: "keren_weinshall.jpg",
       roles: [{ title: "Professor of Law", inst: "Hebrew University" }],
       link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
       email: "keren.weinshall@mail.huji.ac.il",
@@ -370,8 +375,8 @@ export default function App() {
             <div className="space-y-10">
               {isabMembers.map((member, idx) => (
                 <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start pb-8 border-b border-slate-100 last:border-0">
-                  <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100">
-                    <Users className="w-8 h-8 opacity-10" />
+                  <div className="w-24 h-24 shrink-0 bg-slate-50 flex items-center justify-center rounded-lg border border-slate-100 overflow-hidden">
+                    {member.photo ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" /> : <Users className="w-8 h-8 opacity-10" />}
                   </div>
                   <div className="flex-grow pt-1">
                     <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
