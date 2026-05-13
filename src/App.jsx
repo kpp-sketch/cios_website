@@ -56,7 +56,7 @@ export default function App() {
           <button onClick={() => goToMember("Michal Šoltés")} className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">Michal Šoltés</button>
           {" has presented at the "}
           <a href="https://www.lse.ac.uk/" target="_blank" rel="noreferrer" className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">London School of Economics and Political Science</a>
-          {". His presentation on the Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students has been a part of the "}
+          {". His online presentation on the Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students has been a part of the "}
           <a href="https://cep.lse.ac.uk/_new/events/economics-of-crime/" target="_blank" rel="noreferrer" className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">European Seminars on the Economics of Crime</a>
           {" series."}
         </>
