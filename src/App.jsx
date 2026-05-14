@@ -98,7 +98,7 @@ export default function App() {
       name: "Elena Kantorowicz-Reznichenko",
       photo: "kantorowicz_reznichenko.jpg",
       roles: [{ title: "Professor of Quantitative Empirical Legal Studies", inst: "Erasmus University" }],
-      link: "https://kantorowicz-reznichenko.weebly.com/",
+      link: "https://www.eur.nl/en/people/elena-kantorowicz-reznichenko",
       email: "kantorowicz@law.eur.nl",
       bio: "Expert in the economic analysis of law and criminal justice systems."
     },
