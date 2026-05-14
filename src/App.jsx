@@ -484,7 +484,8 @@ export default function App() {
 
       <footer className="pt-16 pb-12 bg-white border-t" style={{ borderColor: colors.borderGray }}>
         <div className="max-w-6xl mx-auto px-6 sm:px-12 text-center">
-          <p className="text-[11px] opacity-60">Co-funded by the European Regional Development Fund, project CIOS, no. CZ.02.01.01/00/23_025/0008690.</p>
+          <img src="/CIOS_Logos_partners.png" alt="CIOS Partners" className="h-16 object-contain mx-auto mb-6" />
+          <p className="text-[11px] opacity-60">Co-funded by the European Regional Development Fund, project Center for Inequality and Open Society, no. CZ.02.01.01/00/23_025/0008690.</p>
         </div>
       </footer>
     </div>
