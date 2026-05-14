@@ -68,7 +68,7 @@ export default function App() {
 
   const isabMembers = [
     {
-      name: "Anna Louisa Bindler",
+      name: "Anna Bindler",
       photo: "anna_bindler.jpg",
       roles: [
         { title: "Professor for Applied Microeconomics", inst: "University of Potsdam" },
