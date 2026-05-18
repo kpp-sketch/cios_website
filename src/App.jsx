@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import {
   Mail, ExternalLink, Users, ChevronDown, FileDown, Library, Globe, Lock,
-  ShoppingCart, Plane, Coins, Heart
+  ShoppingCart, Plane, Coins
 } from 'lucide-react';
 
 export default function App() {
@@ -28,11 +28,6 @@ export default function App() {
   };
 
   const INTRANET_PASSWORD = "heslo123";
-
-  const futureGeneration = [
-    { name: 'Placeholder Baby 1', parent: 'Josef Montag', year: '2024' },
-    { name: 'Placeholder Baby 2', parent: 'Michal Šoltés', year: '2025' }
-  ];
 
   const managementTeam = [
     { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
@@ -96,8 +91,7 @@ export default function App() {
       sub: [
         { label: 'Researchers', id: 'researchers' },
         { label: 'Management', id: 'management' },
-        { label: 'Advisory Board', id: 'isab-board' },
-        { label: 'Future Generation', id: 'future-generation' }
+        { label: 'Advisory Board', id: 'isab-board' }
       ]
     },
     {
@@ -212,58 +206,26 @@ export default function App() {
     }
   };
 
-  const scrollToPublication = (pubId) => {
+  const scrollToPublication = (title) => {
     setActiveTab('publications');
     setTimeout(() => {
-      const element = document.getElementById(pubId);
-      if (element) {
-        const offset = 140;
-        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+      const elements = document.getElementsByTagName('h3');
+      const target = Array.from(elements).find(el => el.innerText.trim() === title.trim());
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const container = target.closest('.pub-item');
+        if (container) {
+          container.style.backgroundColor = '#f1f5f9';
+          setTimeout(() => container.style.backgroundColor = 'transparent', 1500);
+        }
       }
     }, 150);
-  };
-
-  const PersonVignette = ({ member }) => {
-    const isAdminOnly = member.groups && member.groups.includes('admin') &&
-      !member.groups.includes('research') && !member.groups.includes('isab');
-    return (
-      <div id={member.name} className="flex flex-col sm:flex-row gap-8 items-start mb-10 last:mb-0 p-2 rounded-xl transition-colors duration-1000">
-        <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center overflow-hidden rounded-lg border border-slate-200">
-          {member.photo
-            ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" />
-            : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />
-          }
-        </div>
-        <div className="flex-grow pt-1">
-          <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
-          <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
-            {member.role}{member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span><span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
-          </p>
-          {!isAdminOnly && member.bio && (
-            <p className="text-base font-medium leading-relaxed mb-4 max-w-2xl" style={{ color: colors.midBlueText }}>{member.bio}</p>
-          )}
-          <div className="flex flex-wrap gap-6 text-sm font-bold">
-            {member.email && (
-              <a href={`mailto:${member.email}`} className="flex items-center hover:underline" style={{ color: colors.navy }}>
-                <Mail className="w-4 h-4 mr-2 opacity-70" /> {member.email}
-              </a>
-            )}
-            {member.website && (
-              <a href={member.website} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}>
-                <Globe className="w-4 h-4 mr-2 opacity-70" /> Personal Website
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    );
   };
 
   const PublicationItem = ({ pub }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-      <div id={pub.id} className="mb-8 last:mb-0 scroll-mt-32 text-left p-2 rounded-lg transition-colors">
+      <div className="pub-item mb-8 last:mb-0 text-left p-2 rounded-lg transition-colors">
         <div className="flex items-center gap-3 mb-1">
           <span className="text-sm font-bold" style={{ color: colors.navy }}>{pub.year}</span>
           <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>
@@ -323,7 +285,7 @@ export default function App() {
                     <h3
                       className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 leading-tight cursor-pointer hover:underline transition-colors w-full"
                       style={{ color: colors.navy }}
-                      onClick={() => scrollToPublication(featuredPub.id)}
+                      onClick={() => scrollToPublication(featuredPub.title)}
                     >
                       {featuredPub.title}
                     </h3>
@@ -356,7 +318,7 @@ export default function App() {
                   {recentUpdates.map((pub, idx) => (
                     <div key={idx}>
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{(pub.type || '').replace('-', ' ')}</span>
-                      <h3 className="text-xl font-bold mt-1 mb-2 leading-snug cursor-pointer hover:underline" style={{ color: colors.navy }} onClick={() => scrollToPublication(pub.id)}>{pub.title}</h3>
+                      <h3 className="text-xl font-bold mt-1 mb-2 leading-snug cursor-pointer hover:underline" style={{ color: colors.navy }} onClick={() => scrollToPublication(pub.title)}>{pub.title}</h3>
                       <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
                     </div>
                   ))}
@@ -397,12 +359,31 @@ export default function App() {
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
             <section id="researchers" className="mb-20 scroll-mt-32">
               <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Researchers</h2>
-              <div>{alphabeticalTeam.map((member, idx) => <PersonVignette key={idx} member={member} />)}</div>
+              <div className="space-y-10">
+                {alphabeticalTeam.map((member, idx) => (
+                  <div key={idx} id={member.name} className="flex flex-col sm:flex-row gap-8 items-start p-4 rounded-xl transition-colors duration-1000">
+                    <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
+                      {member.photo ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" /> : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />}
+                    </div>
+                    <div className="flex-grow pt-1">
+                      <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
+                      <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
+                        {member.role}{member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span><span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
+                      </p>
+                      {member.bio && <p className="text-base font-medium leading-relaxed mb-4 max-w-2xl" style={{ color: colors.midBlueText }}>{member.bio}</p>}
+                      <div className="flex flex-wrap gap-6 text-sm font-bold">
+                        {member.email && <a href={`mailto:${member.email}`} className="flex items-center hover:underline" style={{ color: colors.navy }}><Mail className="w-4 h-4 mr-2 opacity-70" /> {member.email}</a>}
+                        {member.website && <a href={member.website} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><Globe className="w-4 h-4 mr-2 opacity-70" /> Personal Website</a>}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </section>
 
             <section id="management" className="mb-20 scroll-mt-32 pt-10 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
-              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-12">
+              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-10">
                 {managementTeam.map((m, idx) => (
                   <div key={idx}>
                     <h4 className="font-bold text-lg" style={{ color: colors.navy }}>{m.name}</h4>
@@ -413,16 +394,13 @@ export default function App() {
               </div>
             </section>
 
-            <section id="isab-board" className="mb-20 scroll-mt-32 pt-10 border-t" style={{ borderColor: colors.borderGray }}>
+            <section id="isab-board" className="scroll-mt-32 pt-10 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>International Scientific Advisory Board</h2>
               <div className="space-y-10">
                 {isabMembers.map((member, idx) => (
                   <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start pb-8 border-b border-slate-100 last:border-0">
                     <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
-                      {member.photo
-                        ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" />
-                        : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />
-                      }
+                      {member.photo ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" /> : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />}
                     </div>
                     <div className="flex-grow pt-1">
                       <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
@@ -445,25 +423,6 @@ export default function App() {
                 ))}
               </div>
             </section>
-
-            <section id="future-generation" className="scroll-mt-32 pt-10 border-t" style={{ borderColor: colors.borderGray }}>
-              <div className="flex items-center gap-3 mb-8">
-                <Heart className="w-6 h-6" style={{ color: colors.red }} />
-                <h2 className="text-3xl font-bold" style={{ color: colors.navy }}>Future Generation</h2>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
-                {futureGeneration.map((baby, idx) => (
-                  <div key={idx} className="text-center group">
-                    <div className="aspect-square bg-slate-100 rounded-full mb-4 flex items-center justify-center border-4 border-transparent group-hover:border-slate-200 transition-all">
-                      <Heart className="w-8 h-8 opacity-10" />
-                    </div>
-                    <h4 className="font-bold text-sm" style={{ color: colors.navy }}>{baby.name}</h4>
-                    <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{baby.year}</p>
-                    <p className="text-[10px] font-medium italic mt-1" style={{ color: colors.midBlueText }}>Child of {baby.parent}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
           </div>
         );
       }
@@ -475,36 +434,32 @@ export default function App() {
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
             <section id="working-papers" className="mb-16 scroll-mt-32">
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Working Papers</h2>
-              <div className="space-y-10">{wps.map((p, i) => <PublicationItem key={i} pub={p} />)}</div>
+              <div className="space-y-8">{wps.map((p, i) => <PublicationItem key={i} pub={p} />)}</div>
             </section>
             <section id="journal-articles" className="pt-10 mt-10 mb-16 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Journal Articles</h2>
-              <div className="space-y-10">{articles.map((p, i) => <PublicationItem key={i} pub={p} />)}</div>
+              <div className="space-y-8">{articles.map((p, i) => <PublicationItem key={i} pub={p} />)}</div>
             </section>
             <section id="book-chapters" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
               <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Book Chapters</h2>
-              <div className="space-y-10">{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</div>
+              <div className="space-y-8">{chapters.map((p, i) => <PublicationItem key={i} pub={p} />)}</div>
             </section>
           </div>
         );
       }
       case 'about':
         return (
-          <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
+          <div className="py-12 px-6 sm:px-12 max-w-5xl mx-auto animate-in fade-in duration-500 text-left">
             <h2 id="the-project" className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>About the Project</h2>
-            <p className="text-lg leading-relaxed font-medium mb-6" style={{ color: colors.midBlueText }}>
-              The <strong>Center for Inequality and Open Society (CIOS)</strong> is a major interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.
-            </p>
-            <p className="text-lg leading-relaxed font-medium mb-6" style={{ color: colors.midBlueText }}>
-              While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced quantitative methods, machine learning, and field experiments to analyze critical issues.
-            </p>
-            <p className="text-lg leading-relaxed font-medium mb-12" style={{ color: colors.midBlueText }}>
-              The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.
-            </p>
+            <div className="space-y-6 text-lg leading-relaxed font-medium mb-16" style={{ color: colors.midBlueText }}>
+              <p>The Center for Inequality and Open Society (CIOS) is an interdisciplinary research initiative bringing together experts from philosophy, law, economics, political science, and psychology. Supported by a nearly 150 million CZK grant, our goal is to conduct cutting-edge research on the critical challenges and disparities faced by modern open societies in the digital age.</p>
+              <p>While our research produces rigorous theoretical frameworks, it is heavily rooted in <strong>empirical and experimental methodologies</strong>. Across our six work packages, our teams leverage advanced qualitative and quantitative methods, machine learning, and field experiments to analyze critical issues.</p>
+              <p>The project is coordinated by the <strong>Faculty of Law, Charles University</strong>, in partnership with the <strong>Faculty of Social Sciences, Charles University</strong>, the <strong>Faculty of Law, Masaryk University</strong>, and the <strong>Prague University of Economics and Business</strong>.</p>
+            </div>
 
-            <div id="work-packages" className="pt-10 mt-10 scroll-mt-32 border-t" style={{ borderColor: colors.borderGray }}>
-              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
-              <div className="space-y-12">
+            <div id="work-packages" className="scroll-mt-32">
+              <h2 className="text-3xl font-bold mb-8 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Work Packages</h2>
+              <div className="grid gap-10">
                 {[
                   { id: 'WP1', title: 'Digital Public Sphere', leader: 'Volker Kaul', desc: 'Examining how social media influence public discourse and contribute to societal polarization.' },
                   { id: 'WP2', title: 'Inequality in Justice', leader: 'Michal Šoltés', desc: 'Analyzing the causes and consequences of inequalities in court rulings using unique data from Czech and Dutch judges.' },
@@ -512,13 +467,10 @@ export default function App() {
                   { id: 'WP4', title: 'Finance, Innovation, and Inequality', leader: 'Eva Horváthová', desc: 'Investigating the macroeconomic links between financial systems, technological innovation, and wealth distribution.' },
                   { id: 'WP5', title: 'Legal Aspects of Vulnerability', leader: 'Veronika Bílková', desc: 'Exploring how legal frameworks address and sometimes exacerbate societal vulnerabilities.' },
                   { id: 'WP6', title: 'The Digitally Vulnerable Consumer', leader: 'Jakub Harašta', desc: 'Researching consumer protection and behavioral impacts in digital markets and online platforms.' }
-                ].map((wp, idx) => (
-                  <div key={idx} className="last:mb-0">
-                    <div className="flex gap-4 items-center mb-4">
-                      <span className="font-black text-2xl" style={{ color: colors.red }}>{wp.id}</span>
-                      <h3 className="text-xl font-bold" style={{ color: colors.navy }}>{wp.title}</h3>
-                    </div>
-                    <p className="text-sm mb-2 font-bold" style={{ color: colors.navy }}>Leader: <span className="font-medium text-slate-500">{wp.leader}</span></p>
+                ].map(wp => (
+                  <div key={wp.id} className="border-l-4 pl-6 py-2" style={{ borderColor: colors.red }}>
+                    <h4 className="text-xl font-bold"><span style={{ color: colors.red }}>{wp.id}</span> {wp.title}</h4>
+                    <p className="text-sm font-bold my-1">Leader: <span className="font-normal" style={{ color: colors.midBlueText }}>{wp.leader}</span></p>
                     <p className="text-base font-medium leading-relaxed" style={{ color: colors.midBlueText }}>{wp.desc}</p>
                   </div>
                 ))}
@@ -575,38 +527,45 @@ export default function App() {
             <img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" onError={e => e.target.style.display = 'none'} />
           </div>
           <div className="flex h-full">
-            {navStructure.map(item => (
-              <div
-                key={item.id}
-                className="h-full flex flex-col justify-center px-5 relative"
-                onMouseEnter={() => setHoverTab(item.id)}
-              >
-                <button
-                  onClick={() => handleNavClick(item.id)}
-                  className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1"
-                  style={{
-                    color: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? colors.navy : colors.midBlueText,
-                    borderBottom: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? `2px solid ${colors.red}` : '2px solid transparent'
-                  }}
+            {navStructure.map(item => {
+              const showSub = item.sub && (
+                hoverTab
+                  ? hoverTab === item.id
+                  : activeTab === item.id || (activeTab === 'intranet' && item.id === 'about')
+              );
+              return (
+                <div
+                  key={item.id}
+                  className="h-full flex flex-col justify-center px-5 relative"
+                  onMouseEnter={() => setHoverTab(item.id)}
                 >
-                  {item.label}
-                </button>
-                {item.sub && (activeTab === item.id || hoverTab === item.id || (activeTab === 'intranet' && item.id === 'about')) && (
-                  <div className="absolute top-[72%] right-0 flex gap-6 w-max pt-2 z-50">
-                    {item.sub.map(subItem => (
-                      <button
-                        key={subItem.id}
-                        onClick={() => handleNavClick(item.id, subItem.id)}
-                        className="text-[11px] font-black uppercase tracking-[0.2em] transition hover:opacity-70"
-                        style={{ color: colors.midBlueText }}
-                      >
-                        {subItem.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                  <button
+                    onClick={() => handleNavClick(item.id)}
+                    className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1"
+                    style={{
+                      color: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? colors.navy : colors.midBlueText,
+                      borderBottom: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? `2px solid ${colors.red}` : '2px solid transparent'
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                  {showSub && (
+                    <div className="absolute top-full right-0 flex gap-6 w-max bg-white pt-3 pb-2 z-50">
+                      {item.sub.map(subItem => (
+                        <button
+                          key={subItem.id}
+                          onClick={() => handleNavClick(item.id, subItem.id)}
+                          className="text-[11px] font-black uppercase tracking-[0.2em] transition hover:opacity-70"
+                          style={{ color: colors.midBlueText }}
+                        >
+                          {subItem.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </nav>
@@ -618,11 +577,7 @@ export default function App() {
           <div className="mb-12">
             <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-10" style={{ color: colors.navy }}>Contacts</h4>
             <div className="flex flex-wrap justify-center sm:justify-start gap-x-12 gap-y-10">
-              {[
-                { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-                { name: 'Anna Malá', role: 'Project Manager', email: 'mala@prf.cuni.cz' },
-                { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'pavlov@prf.cuni.cz' }
-              ].map((c, i) => (
+              {managementTeam.map((c, i) => (
                 <div key={i} className="min-w-[150px]">
                   <p className="font-bold text-sm mb-1" style={{ color: colors.navy }}>{c.name}</p>
                   <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{c.role}</p>
@@ -638,7 +593,9 @@ export default function App() {
               alt="CIOS Partners"
               onError={e => e.target.style.display = 'none'}
             />
-            <p className="text-[11px] font-medium text-center max-w-3xl leading-relaxed" style={{ color: '#4A6582' }}>Co-funded by the European Regional Development Fund, project Center for Inequality and Open Society, no. CZ.02.01.01/00/23_025/0008690.</p>
+            <p className="text-[11px] font-medium text-center max-w-3xl leading-relaxed" style={{ color: colors.midBlueText }}>
+              Co-funded by the European Regional Development Fund, project Center for Inequality and Open Society, no. CZ.02.01.01/00/23_025/0008690.
+            </p>
           </div>
         </div>
       </footer>
