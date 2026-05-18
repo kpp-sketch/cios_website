@@ -526,13 +526,9 @@ export default function App() {
           <div className="cursor-pointer flex items-center h-full" onClick={() => handleNavClick('home')}>
             <img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" onError={e => e.target.style.display = 'none'} />
           </div>
-                    <div className="flex h-full relative">
+                              <div className="flex h-full">
             {navStructure.map(item => (
-              <div
-                key={item.id}
-                className="h-full flex flex-col justify-center px-5"
-                onMouseEnter={() => setHoverTab(item.id)}
-              >
+              <div key={item.id} className="h-full flex flex-col justify-center px-5 relative">
                 <button
                   onClick={() => handleNavClick(item.id)}
                   className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1"
@@ -543,27 +539,21 @@ export default function App() {
                 >
                   {item.label}
                 </button>
+                {item.sub && (activeTab === item.id || (activeTab === 'intranet' && item.id === 'about')) && (
+                  <div className="absolute top-[70%] right-5 flex gap-6 w-max">
+                    {item.sub.map(subItem => (
+                      <button
+                        key={subItem.id}
+                        onClick={() => handleNavClick(item.id, subItem.id)}
+                        className="text-[11px] font-black uppercase tracking-[0.2em] text-[#4A6582] hover:text-[#0A192F]"
+                      >
+                        {subItem.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
-            {(() => {
-              const active = navStructure.find(item =>
-                item.sub && (hoverTab === item.id || (!hoverTab && (activeTab === item.id || (activeTab === 'intranet' && item.id === 'about'))))
-              );
-              return active ? (
-                <div className="absolute top-full right-0 flex gap-6 w-max bg-white pt-3 pb-2 z-50">
-                  {active.sub.map(subItem => (
-                    <button
-                      key={subItem.id}
-                      onClick={() => handleNavClick(active.id, subItem.id)}
-                      className="text-[11px] font-black uppercase tracking-[0.2em] transition hover:opacity-70"
-                      style={{ color: colors.midBlueText }}
-                    >
-                      {subItem.label}
-                    </button>
-                  ))}
-                </div>
-              ) : null;
-            })()}
           </div>
         </div>
       </nav>
