@@ -77,7 +77,7 @@ export default function App() {
       name: "Keren Weinshall",
       photo: "keren_weinshall.jpg",
       roles: [{ title: "Professor of Law", inst: "Hebrew University" }],
-      link: "https://en.law.huji.ac.il/people/keren-weinshall-margel",
+      link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
       email: "keren.weinshall@mail.huji.ac.il",
       bio: "Empirical researcher focusing on judicial decision-making and public law."
     }
@@ -109,7 +109,7 @@ export default function App() {
       sub: [
         { label: 'Overview', id: 'the-project' },
         { label: 'Work Packages', id: 'work-packages' },
-        { label: 'Resources', id: 'intranet' }
+        { label: 'Resources for Researchers', id: 'intranet' }
       ]
     }
   ];
@@ -468,11 +468,11 @@ export default function App() {
                   { id: 'WP5', title: 'Legal Aspects of Vulnerability', leader: 'Veronika Bílková', desc: 'Exploring how legal frameworks address and sometimes exacerbate societal vulnerabilities.' },
                   { id: 'WP6', title: 'The Digitally Vulnerable Consumer', leader: 'Jakub Harašta', desc: 'Researching consumer protection and behavioral impacts in digital markets and online platforms.' }
                 ].map(wp => (
-                 <div key={wp.id} className="py-4">
-                    <h4 className="text-xl font-bold mb-2"><span style={{ color: colors.red }}>{wp.id}</span> {wp.title}</h4>
-                      <p className="text-sm font-bold mb-3">Leader: <span className="font-normal" style={{ color: colors.midBlueText }}>{wp.leader}</span></p>
-                        <p className="text-base font-medium leading-relaxed" style={{ color: colors.midBlueText }}>{wp.desc}</p>
-                    </div>
+                  <div key={wp.id} className="py-4">
+                  <h4 className="text-xl font-bold mb-2"><span style={{ color: colors.red }}>{wp.id}</span> {wp.title}</h4>
+                  <p className="text-sm font-bold mb-3">Leader: <span className="font-normal" style={{ color: colors.midBlueText }}>{wp.leader}</span></p>
+                  <p className="text-base font-medium leading-relaxed" style={{ color: colors.midBlueText }}>{wp.desc}</p>
+                </div>
                 ))}
               </div>
             </div>
@@ -529,7 +529,7 @@ export default function App() {
           <div className="flex h-full">
             {navStructure.map(item => {
               const showSub = item.sub && hoverTab === item.id;
-              );
+              }
               return (
                 <div
                   key={item.id}
