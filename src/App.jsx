@@ -526,42 +526,44 @@ export default function App() {
           <div className="cursor-pointer flex items-center h-full" onClick={() => handleNavClick('home')}>
             <img src="/CIOS_Logo_Color.png" alt="CIOS Logo" className="h-24 object-contain" onError={e => e.target.style.display = 'none'} />
           </div>
-          <div className="flex h-full">
-            {navStructure.map(item => {
-              const showSub = item.sub && hoverTab === item.id;
-              return (
-                <div
-                  key={item.id}
-                  className="h-full flex flex-col justify-center px-5 relative"
-                  onMouseEnter={() => setHoverTab(item.id)}
+                    <div className="flex h-full relative">
+            {navStructure.map(item => (
+              <div
+                key={item.id}
+                className="h-full flex flex-col justify-center px-5"
+                onMouseEnter={() => setHoverTab(item.id)}
+              >
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1"
+                  style={{
+                    color: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? colors.navy : colors.midBlueText,
+                    borderBottom: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? `2px solid ${colors.red}` : '2px solid transparent'
+                  }}
                 >
-                  <button
-                    onClick={() => handleNavClick(item.id)}
-                    className="text-[11px] font-black uppercase tracking-[0.2em] transition pb-1"
-                    style={{
-                      color: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? colors.navy : colors.midBlueText,
-                      borderBottom: activeTab === item.id || (activeTab === 'intranet' && item.id === 'about') ? `2px solid ${colors.red}` : '2px solid transparent'
-                    }}
-                  >
-                    {item.label}
-                  </button>
-                  {showSub && (
-                    <div className="absolute top-full left-0 flex gap-6 w-max bg-white pt-3 pb-2 z-50">
-                      {item.sub.map(subItem => (
-                        <button
-                          key={subItem.id}
-                          onClick={() => handleNavClick(item.id, subItem.id)}
-                          className="text-[11px] font-black uppercase tracking-[0.2em] transition hover:opacity-70"
-                          style={{ color: colors.midBlueText }}
-                        >
-                          {subItem.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  {item.label}
+                </button>
+              </div>
+            ))}
+            {(() => {
+              const active = navStructure.find(item =>
+                item.sub && (hoverTab === item.id || (!hoverTab && (activeTab === item.id || (activeTab === 'intranet' && item.id === 'about'))))
               );
-            })}
+              return active ? (
+                <div className="absolute top-full right-0 flex gap-6 w-max bg-white pt-3 pb-2 z-50">
+                  {active.sub.map(subItem => (
+                    <button
+                      key={subItem.id}
+                      onClick={() => handleNavClick(active.id, subItem.id)}
+                      className="text-[11px] font-black uppercase tracking-[0.2em] transition hover:opacity-70"
+                      style={{ color: colors.midBlueText }}
+                    >
+                      {subItem.label}
+                    </button>
+                  ))}
+                </div>
+              ) : null;
+            })()}
           </div>
         </div>
       </nav>
