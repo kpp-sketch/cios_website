@@ -529,7 +529,6 @@ export default function App() {
           <div className="flex h-full">
             {navStructure.map(item => {
               const showSub = item.sub && hoverTab === item.id;
-              }
               return (
                 <div
                   key={item.id}
