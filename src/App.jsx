@@ -77,7 +77,7 @@ export default function App() {
       name: "Keren Weinshall",
       photo: "keren_weinshall.jpg",
       roles: [{ title: "Professor of Law", inst: "Hebrew University" }],
-      link: "https://scholar.google.com/citations?user=xtCNx-8AAAAJ&hl=en",
+      link: "https://en.law.huji.ac.il/people/keren-weinshall-margel",
       email: "keren.weinshall@mail.huji.ac.il",
       bio: "Empirical researcher focusing on judicial decision-making and public law."
     }
@@ -109,7 +109,7 @@ export default function App() {
       sub: [
         { label: 'Overview', id: 'the-project' },
         { label: 'Work Packages', id: 'work-packages' },
-        { label: 'Resources for Researchers', id: 'intranet' }
+        { label: 'Resources', id: 'intranet' }
       ]
     }
   ];
