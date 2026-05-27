@@ -8,7 +8,7 @@ import {
 export default function App() {
   const [teamMembers, setTeamMembers] = useState([]);
   const [publicationsData, setPublicationsData] = useState([]);
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState(() => window.location.hash.replace('#', '') || 'home');
   const [hoverTab, setHoverTab] = useState(null);
   const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
 
@@ -172,8 +172,14 @@ export default function App() {
     };
     fetchData();
   }, []);
+    useEffect(() => {
+    const onHash = () => setActiveTab(window.location.hash.replace('#', '') || 'home');
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
 
   const handleNavClick = (tabId, sectionId = null) => {
+    window.location.hash = tabId;
     if (sectionId === 'intranet') {
       setActiveTab('intranet');
       setActiveResource(null);
