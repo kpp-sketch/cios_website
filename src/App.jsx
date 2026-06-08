@@ -109,7 +109,7 @@ export default function App() {
       sub: [
         { label: 'Overview', id: 'the-project' },
         { label: 'Work Packages', id: 'work-packages' },
-        { label: 'Resources', id: 'intranet' }
+        // { label: 'Resources for Researchers', id: 'intranet' }
       ]
     }
   ];
