@@ -30,11 +30,11 @@ export default function App() {
   const INTRANET_PASSWORD = "heslo123";
 
   const managementTeam = [
-    { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz' },
-    { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz' },
-    { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz' },
-    { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz' },
-    { name: 'Karolína Martínek', role: 'Data Steward & Open Access Officer', email: 'karolina.martinek@prf.cuni.cz' }
+    { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz', photo: 'josef_montag.jpg', bio: '' },
+    { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz', photo: 'anna_mala.jpg', bio: '' },
+    { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz', photo: 'eva_mysakova.jpg', bio: '' },
+    { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz', photo: 'katerina_pavlov.jpg', bio: '' },
+    { name: 'Karolína Martínek', role: 'Data Steward & Open Access Officer', email: 'karolina.martinek@prf.cuni.cz', photo: 'karolina_martinek.jpg', bio: '' }
   ];
 
   const isabMembers = [
@@ -90,7 +90,7 @@ export default function App() {
       label: 'People',
       sub: [
         { label: 'Researchers', id: 'researchers' },
-        { label: 'Management', id: 'management' },
+        { label: 'Project Management', id: 'management' },
         { label: 'Advisory Board', id: 'isab-board' }
       ]
     },
@@ -389,13 +389,19 @@ export default function App() {
             </section>
 
             <section id="management" className="mb-20 scroll-mt-32 pt-10 border-t" style={{ borderColor: colors.borderGray }}>
-              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Management and Administration</h2>
-              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-10">
+              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Project Management and Administration</h2>
+              <div className="space-y-10">
                 {managementTeam.map((m, idx) => (
-                  <div key={idx}>
-                    <h4 className="font-bold text-lg" style={{ color: colors.navy }}>{m.name}</h4>
-                    <p className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: colors.red }}>{m.role}</p>
-                    <a href={`mailto:${m.email}`} className="text-sm font-medium hover:underline block" style={{ color: colors.midBlueText }}>{m.email}</a>
+                  <div key={idx} className="flex flex-col sm:flex-row gap-8 items-start p-4 rounded-xl">
+                    <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
+                      {m.photo ? <img src={`/${m.photo}`} alt={m.name} className="w-full h-full object-cover object-top" /> : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />}
+                    </div>
+                    <div className="flex-grow pt-1">
+                      <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{m.name}</h4>
+                      <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>{m.role}</p>
+                      {m.bio && <p className="text-base font-medium leading-relaxed mb-4 max-w-2xl" style={{ color: colors.midBlueText }}>{m.bio}</p>}
+                      <a href={`mailto:${m.email}`} className="flex items-center hover:underline text-sm font-bold" style={{ color: colors.navy }}><Mail className="w-4 h-4 mr-2 opacity-70" /> {m.email}</a>
+                    </div>
                   </div>
                 ))}
               </div>
