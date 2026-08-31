@@ -358,33 +358,71 @@ export default function App() {
           </div>
         );
       }
-      case 'people': {
+          case 'people': {
         const alphabeticalTeam = teamMembers
           .filter(m => m.groups && (m.groups.includes('research') || m.groups.includes('admin')))
           .sort((a, b) => (a.surname || '').localeCompare((b.surname || ''), 'cs'));
+
+        const presentLetters = new Set(alphabeticalTeam.map(m => (m.surname || '').charAt(0).toUpperCase()));
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
         return (
           <div className="py-12 px-6 sm:px-12 max-w-4xl mx-auto animate-in fade-in duration-500">
             <section id="researchers" className="mb-20 scroll-mt-32">
-              <h2 className="text-3xl font-bold mb-10 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Researchers</h2>
+              <h2 className="text-3xl font-bold mb-6 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Researchers</h2>
+
+              {/* Alphabet navigation */}
+              <div className="flex flex-wrap gap-1 mb-10">
+                {alphabet.map(letter => (
+                  presentLetters.has(letter) ? (
+                    <button
+                      key={letter}
+                      onClick={() => {
+                        const el = document.getElementById(`letter-${letter}`);
+                        if (el) {
+                          const y = el.getBoundingClientRect().top + window.pageYOffset - 160;
+                          window.scrollTo({ top: y, behavior: 'smooth' });
+                        }
+                      }}
+                      className="w-8 h-8 text-xs font-black rounded transition hover:opacity-70"
+                      style={{ color: colors.navy, backgroundColor: '#F1F5F9' }}
+                    >
+                      {letter}
+                    </button>
+                  ) : (
+                    <span key={letter} className="w-8 h-8 text-xs font-black flex items-center justify-center rounded opacity-20" style={{ color: colors.midBlueText }}>
+                      {letter}
+                    </span>
+                  )
+                ))}
+              </div>
+
               <div className="space-y-10">
-                {alphabeticalTeam.map((member, idx) => (
-                  <div key={idx} id={member.name} className="flex flex-col sm:flex-row gap-8 items-start p-4 rounded-xl transition-colors duration-1000">
-                    <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
-                      {member.photo ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" /> : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />}
-                    </div>
-                    <div className="flex-grow pt-1">
-                      <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
-                      <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
-                        {member.role}{member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span><span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
-                      </p>
-                      {member.bio && <p className="text-base font-medium leading-relaxed mb-4 max-w-2xl" style={{ color: colors.midBlueText }}>{member.bio}</p>}
-                      <div className="flex flex-wrap gap-6 text-sm font-bold">
-                        {member.email && <a href={`mailto:${member.email}`} className="flex items-center hover:underline" style={{ color: colors.navy }}><Mail className="w-4 h-4 mr-2 opacity-70" /> {member.email}</a>}
-                        {member.website && <a href={member.website} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><Globe className="w-4 h-4 mr-2 opacity-70" /> Personal Website</a>}
+                {alphabeticalTeam.map((member, idx) => {
+                  const letter = (member.surname || '').charAt(0).toUpperCase();
+                  const isFirstOfLetter = idx === 0 || (alphabeticalTeam[idx - 1].surname || '').charAt(0).toUpperCase() !== letter;
+                  return (
+                    <div key={idx}>
+                      {isFirstOfLetter && <div id={`letter-${letter}`} className="-mt-4" />}
+                      <div id={member.name} className="flex flex-col sm:flex-row gap-8 items-start p-4 rounded-xl transition-colors duration-1000">
+                        <div className="w-32 h-32 shrink-0 bg-slate-100 flex items-center justify-center rounded-lg overflow-hidden border border-slate-200">
+                          {member.photo ? <img src={`/${member.photo}`} alt={member.name} className="w-full h-full object-cover object-top" /> : <Users className="w-10 h-10 opacity-20" style={{ color: colors.navy }} />}
+                        </div>
+                        <div className="flex-grow pt-1">
+                          <h4 className="text-xl font-bold mb-1" style={{ color: colors.navy }}>{member.name}</h4>
+                          <p className="text-sm font-bold mb-3" style={{ color: colors.red }}>
+                            {member.role}{member.affiliation && <><span className="mx-2 text-slate-300 font-normal">|</span><span style={{ color: colors.midBlueText }}>{member.affiliation}</span></>}
+                          </p>
+                          {member.bio && <p className="text-base font-medium leading-relaxed mb-4 max-w-2xl" style={{ color: colors.midBlueText }}>{member.bio}</p>}
+                          <div className="flex flex-wrap gap-6 text-sm font-bold">
+                            {member.email && <a href={`mailto:${member.email}`} className="flex items-center hover:underline" style={{ color: colors.navy }}><Mail className="w-4 h-4 mr-2 opacity-70" /> {member.email}</a>}
+                            {member.website && <a href={member.website} target="_blank" rel="noreferrer" className="flex items-center hover:underline" style={{ color: colors.navy }}><Globe className="w-4 h-4 mr-2 opacity-70" /> Personal Website</a>}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
 
