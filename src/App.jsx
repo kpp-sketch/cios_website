@@ -164,7 +164,10 @@ export default function App() {
           const pubBuf = await pubRes.arrayBuffer();
           const pubWb = XLSX.read(pubBuf);
           const pubData = XLSX.utils.sheet_to_json(pubWb.Sheets[pubWb.SheetNames[0]]);
-          setPublicationsData(pubData.sort((a, b) => (b.year || 0) - (a.year || 0)));
+          setPublicationsData(pubData.sort((a, b) => {
+          if ((b.year || 0) !== (a.year || 0)) return (b.year || 0) - (a.year || 0);
+          return (b.month || 0) - (a.month || 0);
+          }));
         }
       } catch (error) {
         console.error("Load Error:", error);
