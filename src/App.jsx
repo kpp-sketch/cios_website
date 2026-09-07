@@ -10,6 +10,7 @@ export default function App() {
   const [publicationsData, setPublicationsData] = useState([]);
   const [activeTab, setActiveTab] = useState(() => window.location.hash.replace('#', '') || 'home');
   const [hoverTab, setHoverTab] = useState(null);
+  const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
   const [newsData, setNewsData] = useState([]);
   const [showAllNews, setShowAllNews] = useState(false);
 
