@@ -10,7 +10,8 @@ export default function App() {
   const [publicationsData, setPublicationsData] = useState([]);
   const [activeTab, setActiveTab] = useState(() => window.location.hash.replace('#', '') || 'home');
   const [hoverTab, setHoverTab] = useState(null);
-  const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
+  const [newsData, setNewsData] = useState([]);
+  const [showAllNews, setShowAllNews] = useState(false);
 
   const [passwordInput, setPasswordInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -127,25 +128,6 @@ export default function App() {
     }, 150);
   };
 
-  const newsData = [
-    {
-      date: "May 2026",
-      title: "Michal Šoltés (Leader of Work Package 2) at the London School of Economics",
-      desc: (
-        <>
-          <button onClick={() => goToMember("Michal Šoltés")} className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">Michal Šoltés</button>
-          {" has presented at the "}
-          <a href="https://www.lse.ac.uk/" target="_blank" rel="noreferrer" className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">London School of Economics and Political Science</a>
-          {". His online presentation on the Role of Expertise in Consistency in Decision-Making: Experimental Evidence with Public Prosecutors and Law Students has been a part of the "}
-          <a href="https://cep.lse.ac.uk/_new/events/economics-of-crime/" target="_blank" rel="noreferrer" className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">European Seminars on the Economics of Crime</a>
-          {" series."}
-        </>
-      ),
-      source: "https://cep.lse.ac.uk/_new/events/event.asp?index=10552",
-      pdf: null
-    }
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -168,6 +150,13 @@ export default function App() {
           if ((b.year || 0) !== (a.year || 0)) return (b.year || 0) - (a.year || 0);
           return (b.month || 0) - (a.month || 0);
           }));
+        }
+              const newsRes = await fetch('/news.xlsx?t=' + new Date().getTime());
+        if (newsRes.ok) {
+          const newsBuf = await newsRes.arrayBuffer();
+          const newsWb = XLSX.read(newsBuf);
+          const rawNews = XLSX.utils.sheet_to_json(newsWb.Sheets[newsWb.SheetNames[0]]);
+          setNewsData(rawNews.sort((a, b) => (b.date || '').localeCompare(a.date || '')));
         }
       } catch (error) {
         console.error("Load Error:", error);
@@ -263,6 +252,24 @@ export default function App() {
       </div>
     );
   };
+         const autoLinkNames = (text) => {
+    if (!text || !teamMembers.length) return text;
+    let result = [text];
+    teamMembers.forEach(member => {
+      if (!member.name) return;
+      result = result.flatMap((part, partIdx) => {
+        if (typeof part !== 'string') return [part];
+        const segments = part.split(member.name);
+        if (segments.length === 1) return [part];
+        return segments.flatMap((seg, i) =>
+          i < segments.length - 1
+            ? [seg, <button key={`${member.name}-${partIdx}-${i}`} onClick={() => goToMember(member.name)} className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">{member.name}</button>]
+            : [seg]
+        );
+      });
+    });
+    return result;
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -332,20 +339,40 @@ export default function App() {
                       <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
                     </div>
                   ))}
-                  {newsData.length > 0 && (
-                    <div className="pt-8 border-t space-y-8" style={{ borderColor: colors.borderGray }}>
-                      {newsData.map((news, idx) => (
-                        <div key={idx}>
-                          <span className="text-[10px] font-black uppercase tracking-widest opacity-60 block mb-1">{news.date}</span>
-                          <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{news.title}</h3>
-                          <p className="text-base font-medium leading-relaxed mb-3" style={{ color: colors.midBlueText }}>{news.desc}</p>
-                          {news.source && (
-                            <a href={news.source} target="_blank" rel="noreferrer" className="text-[11px] font-black uppercase tracking-widest flex items-center hover:underline transition-opacity" style={{ color: colors.red }}>
-                              <ExternalLink className="w-3 h-3 mr-2" /> Full Event Details
-                            </a>
-                          )}
-                        </div>
-                      ))}
+                                {newsData.length > 0 && (
+                    <div className="pt-8 border-t" style={{ borderColor: colors.borderGray }}>
+                      <div className="space-y-8">
+                        {(showAllNews ? newsData : newsData.slice(0, 1)).map((news, idx) => (
+                          <div key={idx}>
+                            <div className="flex items-center gap-3 mb-1">
+                              {news.category && <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 bg-slate-100 rounded" style={{ color: colors.red }}>{news.category}</span>}
+                              <span className="text-[10px] font-black uppercase tracking-widest opacity-60">{news.date}</span>
+                            </div>
+                            <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{news.title}</h3>
+                            {news.photo && (
+                              <div className="mb-3">
+                                <img src={`/${news.photo}`} alt={news.photo_caption || news.title} className="rounded-lg max-h-48 object-cover" />
+                                {news.photo_caption && <p className="text-xs mt-1 italic" style={{ color: colors.midBlueText }}>{news.photo_caption}</p>}
+                              </div>
+                            )}
+                            <p className="text-base font-medium leading-relaxed mb-3" style={{ color: colors.midBlueText }}>{autoLinkNames(news.desc)}</p>
+                            {news.source && (
+                              <a href={news.source} target="_blank" rel="noreferrer" className="text-[11px] font-black uppercase tracking-widest flex items-center hover:underline transition-opacity" style={{ color: colors.red }}>
+                                <ExternalLink className="w-3 h-3 mr-2" /> Full Event Details
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      {newsData.length > 1 && (
+                        <button
+                          onClick={() => setShowAllNews(!showAllNews)}
+                          className="mt-6 text-[11px] font-black uppercase tracking-widest flex items-center hover:opacity-70 transition-opacity"
+                          style={{ color: colors.red }}
+                        >
+                          {showAllNews ? <>Show Less <ChevronDown className="w-3 h-3 ml-1 rotate-180" /></> : <>Older Updates <ChevronDown className="w-3 h-3 ml-1" /></>}
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
