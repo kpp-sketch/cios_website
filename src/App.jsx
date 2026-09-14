@@ -403,30 +403,30 @@ export default function App() {
               <h2 className="text-3xl font-bold mb-6 border-b-2 inline-block pb-2" style={{ color: colors.navy, borderColor: colors.red }}>Researchers</h2>
 
               {/* Alphabet navigation */}
-              <div className="flex flex-wrap gap-1 mb-10">
-                {alphabet.map(letter => (
-                  presentLetters.has(letter) ? (
-                    <button
-                      key={letter}
-                      onClick={() => {
-                        const el = document.getElementById(`letter-${letter}`);
-                        if (el) {
-                          const y = el.getBoundingClientRect().top + window.pageYOffset - 160;
-                          window.scrollTo({ top: y, behavior: 'smooth' });
-                        }
-                      }}
-                      className="w-8 h-8 text-xs font-black rounded transition hover:opacity-70"
-                      style={{ color: colors.navy, backgroundColor: '#F1F5F9' }}
-                    >
-                      {letter}
-                    </button>
-                  ) : (
-                    <span key={letter} className="w-8 h-8 text-xs font-black flex items-center justify-center rounded opacity-20" style={{ color: colors.midBlueText }}>
-                      {letter}
-                    </span>
-                  )
-                ))}
-              </div>
+              <div className="flex gap-0.5 mb-10 overflow-x-auto">
+  {alphabet.map(letter => (
+    presentLetters.has(letter) ? (
+      <button
+        key={letter}
+        onClick={() => {
+          const el = document.getElementById(`letter-${letter}`);
+          if (el) {
+            const y = el.getBoundingClientRect().top + window.pageYOffset - 160;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        }}
+        className="w-6 h-6 text-[10px] font-black rounded transition hover:opacity-70 shrink-0"
+        style={{ color: colors.navy, backgroundColor: '#F1F5F9' }}
+      >
+        {letter}
+      </button>
+    ) : (
+      <span key={letter} className="w-6 h-6 text-[10px] font-black flex items-center justify-center rounded opacity-20 shrink-0" style={{ color: colors.midBlueText }}>
+        {letter}
+      </span>
+    )
+  ))}
+</div>
 
               <div className="space-y-10">
                 {alphabeticalTeam.map((member, idx) => {
