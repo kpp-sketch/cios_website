@@ -220,7 +220,25 @@ export default function App() {
       }
     }, 150);
   };
-
+ const autoLinkNames = (text) => {
+    if (!text || !teamMembers.length) return text;
+    let result = [text];
+    teamMembers.forEach(member => {
+      if (!member.name) return;
+      result = result.flatMap((part, partIdx) => {
+        if (typeof part !== 'string') return [part];
+        const segments = part.split(member.name);
+        if (segments.length === 1) return [part];
+        return segments.flatMap((seg, i) =>
+          i < segments.length - 1
+            ? [seg, <button key={`${member.name}-${partIdx}-${i}`} onClick={() => goToMember(member.name)} className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">{member.name}</button>]
+            : [seg]
+        );
+      });
+    });
+    return result;
+  };
+  
   const PublicationItem = ({ pub }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -232,7 +250,7 @@ export default function App() {
           </span>
         </div>
         <h3 className="text-xl font-bold mb-2 leading-snug" style={{ color: colors.navy }}>{pub.title}</h3>
-        <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+        <p className="text-base font-medium mb-3" style={{ color: colors.midBlueText }}>{autoLinkNames(pub.authors)}</p>
         {pub.abstract && (
           <div className="mb-4">
             <button
@@ -253,24 +271,7 @@ export default function App() {
       </div>
     );
   };
-         const autoLinkNames = (text) => {
-    if (!text || !teamMembers.length) return text;
-    let result = [text];
-    teamMembers.forEach(member => {
-      if (!member.name) return;
-      result = result.flatMap((part, partIdx) => {
-        if (typeof part !== 'string') return [part];
-        const segments = part.split(member.name);
-        if (segments.length === 1) return [part];
-        return segments.flatMap((seg, i) =>
-          i < segments.length - 1
-            ? [seg, <button key={`${member.name}-${partIdx}-${i}`} onClick={() => goToMember(member.name)} className="font-bold underline decoration-red-200 hover:text-red-600 transition-colors">{member.name}</button>]
-            : [seg]
-        );
-      });
-    });
-    return result;
-  };
+        
 
   const renderContent = () => {
     switch (activeTab) {
@@ -307,7 +308,7 @@ export default function App() {
                     >
                       {featuredPub.title}
                     </h3>
-                    <p className="text-lg font-bold mb-6" style={{ color: colors.midBlueText }}>{featuredPub.authors}</p>
+                    <p className="text-lg font-bold mb-6" style={{ color: colors.midBlueText }}>{autoLinkNames(featuredPub.authors)}</p>
                     {featuredPub.abstract && (
                       <div className="mb-4">
                         <button
@@ -337,7 +338,7 @@ export default function App() {
                     <div key={idx}>
                       <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: colors.red }}>{(pub.type || '').replace('-', ' ')}</span>
                       <h3 className="text-xl font-bold mt-1 mb-2 leading-snug cursor-pointer hover:underline" style={{ color: colors.navy }} onClick={() => scrollToPublication(pub.title)}>{pub.title}</h3>
-                      <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{pub.authors}</p>
+                      <p className="text-sm font-medium" style={{ color: colors.midBlueText }}>{autoLinkNames(pub.authors)}</p>
                     </div>
                   ))}
                                 {newsData.length > 0 && (
