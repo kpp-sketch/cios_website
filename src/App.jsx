@@ -34,8 +34,8 @@ export default function App() {
   const managementTeam = [
     { name: 'Josef Montag', role: 'Principal Investigator', email: 'montagj@prf.cuni.cz', photo: 'Josef_Montag.jpg', bio: '' },
     { name: 'Anna Malá', role: 'Project Manager', email: 'anna.mala@prf.cuni.cz', photo: 'Anna_Mala.jpg', bio: '' },
-    { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz', photo: 'eva_mysakova.jpg', bio: '' },
-    { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz', photo: 'katerina_pavlov.jpg', bio: '' },
+    { name: 'Eva Myšáková', role: 'Financial Manager', email: 'eva.mysakova@prf.cuni.cz', photo: 'eva_mysakova.png', bio: '' },
+    { name: 'Kateřina Pospíchalová Pavlov', role: 'Administrator', email: 'katerina.pospichalovapavlov@prf.cuni.cz', photo: 'katerina_pavlov.png', bio: '' },
     { name: 'Karolína Martínek', role: 'Data Steward & Open Access Officer', email: 'karolina.martinek@prf.cuni.cz', photo: 'karolina_martinek.png', bio: '' }
   ];
 
